@@ -130,3 +130,37 @@ In this step, we defined the repository interfaces for all entities, which will 
 ### Benefits:
 - **JpaRepository**: Extending `JpaRepository` enables basic CRUD operations for each entity without the need to write any implementation code.
 - **Custom Query Methods**: Additional methods for finding entities by specific attributes (e.g., `findByEmail`, `findByCategoryId`) enhance the flexibility of data access.
+
+
+## Step 5: Created Exception Layer
+
+In this step, we added custom exception classes and implemented a global error handling mechanism.
+
+### What we did:
+1. Created custom exceptions:
+   - `ResourceNotFoundException`: Thrown when a resource cannot be found (returns 404 NOT FOUND).
+   - `InvalidInputException`: Thrown when the input provided is invalid (returns 400 BAD REQUEST).
+   - `OperationFailedException`: Thrown when an internal operation fails (returns 500 INTERNAL SERVER ERROR).
+   - `AlreadyDeletedException`: Thrown when an attempt is made to delete an already deleted resource (returns 400 BAD REQUEST).
+   - `SaveException`: Thrown when a save operation fails (returns 500 INTERNAL SERVER ERROR).
+
+2. Implemented `GlobalExceptionHandler`:
+   - Catches the custom exceptions and general exceptions across the application.
+   - Formats the error responses with `ErrorDetails` which include a timestamp, error message, and details about the request.
+
+### Used Structures, Annotations, and Libraries:
+
+1. **`@ResponseStatus`**: Specifies the HTTP status code to be returned when the exception is thrown.
+   - Example: `@ResponseStatus(HttpStatus.NOT_FOUND)` returns a 404 status code.
+
+2. **`@ControllerAdvice`**: Global error handler that manages exceptions across the entire application.
+
+3. **`@ExceptionHandler`**: Handles specific exceptions and returns a custom response for each.
+
+4. **`ResponseEntity`**: Used to return custom HTTP responses, including status codes and messages.
+
+5. **`WebRequest`**: Provides details about the incoming HTTP request, used in error reporting.
+
+### Benefits:
+- Centralized error handling ensures consistency in the application's response to errors.
+- Custom exceptions make it easier to provide meaningful error messages to users.
