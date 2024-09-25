@@ -116,6 +116,13 @@
             <version>1.15</version>
         </dependency>
 
+        <!--MAPSTRUCT-->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+        </dependency>
+
 
         <!--TEST-->
         <dependency>

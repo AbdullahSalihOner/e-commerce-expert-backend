@@ -205,3 +205,34 @@ In this step, we created Data Transfer Objects (DTOs) to handle the data flowing
 - **Data Protection**: DTOs provide a layer of abstraction, protecting the internal structure of database entities.
 - **Input Validation**: Request DTOs ensure that the data coming from the client meets the necessary requirements before reaching the service layer.
 - **Lombok Integration**: Lombok reduces boilerplate code, making DTO classes cleaner and easier to maintain.
+
+
+## Step 7: Created Mapper Layer with MapStruct
+
+In this step, we used MapStruct to create mappers for converting between entities and DTOs, simplifying the data transformation process.
+
+### What we did:
+1. Created mapper interfaces for the following entities:
+   - **User**: Converts between `User` entity and `UserRequestDto` and `UserResponseDto`.
+   - **Product**: Converts between `Product` entity and `ProductRequestDto` and `ProductResponseDto`, manually mapping the category and seller names.
+   - **Order**: Converts between `Order` entity and `OrderRequestDto` and `OrderResponseDto`, including custom mapping for product names in orders.
+   - **Review**: Converts between `Review` entity and `ReviewRequestDto` and `ReviewResponseDto`, mapping product and buyer names.
+   - **WishList**: Converts between `WishList` entity and `WishListRequestDto` and `WishListResponseDto`, with custom mapping for product names.
+
+### Used Structures, Annotations, and Libraries:
+
+1. **MapStruct**:
+   - `@Mapper(componentModel = "spring")`: Defines the class as a mapper and integrates it with Spring.
+   - `@Mapping`: Custom field mappings between entities and DTOs, such as mapping `category.name` to `categoryName` in product DTOs.
+   - `@Named`: Used for custom mapping methods like transforming a list of products into a list of product names.
+
+2. **List**:
+   - Used to manage and transform lists of entities or DTOs, such as converting a list of products in an order to a list of product names.
+
+3. **Stream API**:
+   - Java 8 streams are used to efficiently transform lists, such as extracting product names from a list of products in an order or wish list.
+
+### Benefits:
+- **Automated Mapping**: MapStruct simplifies and automates the conversion process between entities and DTOs, reducing boilerplate code.
+- **Custom Mappings**: Allows for custom field mappings where necessary, providing flexibility in how data is transferred between layers.
+- **Integration with Spring**: MapStruct integrates seamlessly with Spring, making it easy to inject and use mappers throughout the application.
