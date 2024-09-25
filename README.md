@@ -164,3 +164,44 @@ In this step, we added custom exception classes and implemented a global error h
 ### Benefits:
 - Centralized error handling ensures consistency in the application's response to errors.
 - Custom exceptions make it easier to provide meaningful error messages to users.
+
+
+
+## Step 6: Created DTO Layer
+
+In this step, we created Data Transfer Objects (DTOs) to handle the data flowing between the client and the server without exposing the actual database entities.
+
+### What we did:
+1. Created DTOs for the following entities:
+   - **User**:
+      - `UserRequestDto`: Handles incoming data for creating or updating a user.
+      - `UserResponseDto`: Returns user data without exposing sensitive information like passwords.
+   - **Product**:
+      - `ProductRequestDto`: Used for creating or updating product details, including product images.
+      - `ProductResponseDto`: Returns product details, including category and seller names.
+   - **Order**:
+      - `OrderRequestDto`: Used for placing orders, including buyer ID and product IDs.
+      - `OrderResponseDto`: Returns order details, including buyer name and product names.
+   - **Review**:
+      - `ReviewRequestDto`: Used for adding a review for a product or seller.
+      - `ReviewResponseDto`: Returns review details, including the product and buyer names.
+   - **WishList**:
+      - `WishListRequestDto`: Handles adding products to a user's wish list.
+      - `WishListResponseDto`: Returns wish list details, including user and product names.
+
+### Used Structures, Annotations, and Libraries:
+
+1. **Lombok Annotations**:
+   - `@Data`: Automatically generates getter and setter methods along with `toString`, `equals`, `hashCode`, and constructors.
+   - `@AllArgsConstructor`: Generates a constructor with all fields as parameters.
+   - `@NoArgsConstructor`: Generates a no-argument constructor.
+   - `@Builder`: Implements the builder pattern for more flexible object creation.
+
+2. **Validation Annotations**:
+   - `@NotNull`: Ensures that required fields in request DTOs are not null.
+   - `@Email`: Validates email format in the `UserRequestDto`.
+
+### Benefits:
+- **Data Protection**: DTOs provide a layer of abstraction, protecting the internal structure of database entities.
+- **Input Validation**: Request DTOs ensure that the data coming from the client meets the necessary requirements before reaching the service layer.
+- **Lombok Integration**: Lombok reduces boilerplate code, making DTO classes cleaner and easier to maintain.
