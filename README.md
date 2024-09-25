@@ -2,7 +2,7 @@
 
 This project is the backend for an e-commerce application, providing APIs for managing products, brands, and categories.
 
-## Step 1: Project Configuration and Dependency Management
+## Step 1: Project Configuration and Dependency Management ( start at commit-5)
 
 In this step, we configured the project dependencies and set up database connections.
 
@@ -87,3 +87,46 @@ In this step, we defined the main entities (models) for the e-commerce project a
 - **WishList**: Allows users to store products for future purchase consideration.
 
 This structure establishes a strong foundation for managing the e-commerce application's core data and relationships.
+
+
+## Step 4: Created Repository Layer 
+
+In this step, we defined the repository interfaces for all entities, which will handle database operations.
+
+### What we did:
+1. Created repository interfaces for all entities, including:
+   - `UserRepository`: To manage users by roles and email.
+   - `AboutRepository`: To manage seller information.
+   - `ProductRepository`: To fetch products by category, seller, or name.
+   - `CategoryRepository`: To find categories by name.
+   - `OrderRepository`: To manage orders by buyer, status, or date range.
+   - `CartRepository`: To manage carts by buyer.
+   - `PaymentRepository`: To fetch payments by order.
+   - `ReviewRepository`: To manage reviews by product or buyer.
+   - `ShipmentRepository`: To track shipments by courier or status.
+   - `CouponRepository`: To find coupons by code or product.
+   - `AddressRepository`: To manage user addresses.
+   - `WishListRepository`: To manage wish lists by user.
+
+### Used Structures, Annotations, and Libraries:
+1. **`@Repository` Annotation**:
+   - Marks the class as a data access component.
+   - Enables Spring to recognize it as a Bean and integrate it into the exception handling mechanism.
+
+2. **`JpaRepository` Interface**:
+   - Extends Spring Data JPA’s repository framework to provide CRUD operations.
+   - Used to automatically handle common database operations without writing SQL queries.
+
+3. **Custom Query Methods**:
+   - Query methods are derived from method names like `findByEmail` and `findByCategoryId` to perform specific searches.
+   - Simplifies querying by avoiding manual SQL writing.
+
+4. **Optional**:
+   - Provides a safe way to handle potentially null values, preventing `NullPointerException`.
+
+5. **List**:
+   - Returns multiple records from the database and stores them in a list.
+
+### Benefits:
+- **JpaRepository**: Extending `JpaRepository` enables basic CRUD operations for each entity without the need to write any implementation code.
+- **Custom Query Methods**: Additional methods for finding entities by specific attributes (e.g., `findByEmail`, `findByCategoryId`) enhance the flexibility of data access.
