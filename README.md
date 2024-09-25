@@ -33,4 +33,24 @@ In this step, we configured the project dependencies and set up database connect
 - **Springdoc OpenAPI**: For automatic generation of Swagger documentation.
 - **Bucket4J**: For implementing rate limiting mechanisms.
 - **Lombok**: For reducing repetitive code in entity and DTO classes.
-"
+
+## Step 2: Create Layered Architecture Folder Structure
+
+We created a folder structure that follows a layered architecture, dividing the project into the following layers:
+
+### What we did:
+1. Created the following folders:
+   - `controller`: For API endpoints (REST Controllers).
+   - `service`: For business logic and services. Created `impl` subdirectory for implementations.
+   - `repository`: For data access logic (Database repositories).
+   - `model`: For database entity classes.
+   - `dto`: For Data Transfer Objects (DTOs).
+   - `mapper`: For mapping between entities and DTOs.
+   - `exception`: For custom exception handling.
+   - `config`: For configuration classes (e.g., security or Swagger configuration).
+   - `util`: For utility classes and helper functions.
+
+### Benefits of Layered Architecture:
+- **Modularity**: Each layer has a distinct responsibility, making the project more maintainable and easier to scale.
+- **Separation of Concerns**: Isolates business logic, data access, and API endpoints, making the code more organized and testable.
+- **Reusability**: Components can be reused across different layers, reducing code duplication.
