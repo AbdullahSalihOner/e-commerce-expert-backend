@@ -1,5 +1,6 @@
 package com.salih.controller;
 
+import com.salih.constant.ApiEndpoints;
 import com.salih.dto.order.OrderRequestDto;
 import com.salih.dto.order.OrderResponseDto;
 import com.salih.result.DataResult;
@@ -18,7 +19,7 @@ import java.time.Duration;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping(ApiEndpoints.ORDER_BASE)
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -29,7 +30,7 @@ public class OrderController {
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
             .build();
 
-    @GetMapping("/all")
+    @GetMapping(ApiEndpoints.ORDER_GET_ALL)
     public ResponseEntity<DataResult<List<OrderResponseDto>>> getAllOrders() {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
@@ -38,7 +39,7 @@ public class OrderController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ApiEndpoints.ORDER_GET_BY_ID)
     public ResponseEntity<DataResult<OrderResponseDto>> getOrderById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
@@ -47,7 +48,7 @@ public class OrderController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
-    @PostMapping("/place")
+    @PostMapping(ApiEndpoints.ORDER_PLACE)
     public ResponseEntity<Result> placeOrder(@RequestBody @Valid OrderRequestDto orderRequestDto) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);

@@ -1,5 +1,6 @@
 package com.salih.controller;
 
+import com.salih.constant.ApiEndpoints;
 import com.salih.dto.user.UserRequestDto;
 import com.salih.dto.user.UserResponseDto;
 import com.salih.result.DataResult;
@@ -18,7 +19,7 @@ import java.time.Duration;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(ApiEndpoints.USER_BASE)
 @RequiredArgsConstructor
 public class UserController {
 
@@ -29,7 +30,7 @@ public class UserController {
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
             .build();
 
-    @GetMapping("/all")
+    @GetMapping(ApiEndpoints.USER_GET_ALL)
     public ResponseEntity<DataResult<List<UserResponseDto>>> getAllUsers() {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
@@ -38,7 +39,7 @@ public class UserController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ApiEndpoints.USER_GET_BY_ID)
     public ResponseEntity<DataResult<UserResponseDto>> getUserById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
@@ -47,7 +48,7 @@ public class UserController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
-    @PostMapping("/add")
+    @PostMapping(ApiEndpoints.USER_CREATE)
     public ResponseEntity<Result> addUser(@RequestBody @Valid UserRequestDto userRequestDto) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
@@ -56,7 +57,7 @@ public class UserController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(result);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping(ApiEndpoints.USER_UPDATE)
     public ResponseEntity<Result> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequestDto userRequestDto) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
@@ -65,7 +66,7 @@ public class UserController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping(ApiEndpoints.USER_DELETE)
     public ResponseEntity<Result> deleteUser(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);

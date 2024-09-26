@@ -1,5 +1,6 @@
 package com.salih.controller;
 
+import com.salih.constant.ApiEndpoints;
 import com.salih.dto.review.ReviewRequestDto;
 import com.salih.dto.review.ReviewResponseDto;
 import com.salih.result.DataResult;
@@ -18,7 +19,7 @@ import java.time.Duration;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping(ApiEndpoints.REVIEW_BASE)
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -29,7 +30,7 @@ public class ReviewController {
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
             .build();
 
-    @GetMapping("/all")
+    @GetMapping(ApiEndpoints.REVIEW_GET_ALL)
     public ResponseEntity<DataResult<List<ReviewResponseDto>>> getAllReviews() {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
@@ -38,7 +39,7 @@ public class ReviewController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ApiEndpoints.REVIEW_GET_BY_PRODUCT_ID)
     public ResponseEntity<DataResult<ReviewResponseDto>> getReviewById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
@@ -47,7 +48,7 @@ public class ReviewController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
-    @PostMapping("/add")
+    @PostMapping(ApiEndpoints.REVIEW_ADD)
     public ResponseEntity<Result> addReview(@RequestBody @Valid ReviewRequestDto reviewRequestDto) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);

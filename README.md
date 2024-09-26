@@ -413,3 +413,44 @@ In this step, we have ensured that the `User` entity is consistently referenced 
 ### Benefits:
 - **Consistency**: All layers in the system now consistently use `User` as the entity name, making it easier to understand and maintain relationships with the `User` entity.
 - **Clear Mapping**: DTOs and Mappers clearly map `userId` and `userName`, making data handling more straightforward.
+
+
+## Step 12: Centralizing API Endpoints
+
+In this step, we improved the maintainability of the project by centralizing all API endpoints into a dedicated `ApiEndpoints` class. This ensures that any changes to API routes can be easily managed in a single location without modifying each controller class.
+
+### Changes Made:
+- Created a `ApiEndpoints` class to store all API endpoint paths as constants.
+- Updated all controller classes (`ProductController`, `OrderController`, `UserController`, `WishListController`, `ReviewController`) to use the constants from the `ApiEndpoints` class for defining the API paths.
+
+### Benefits:
+- **Maintainability**: Centralizing endpoint definitions reduces the risk of inconsistencies and makes it easier to update or change API routes in the future.
+- **Code Readability**: By using constant names for routes, it becomes clearer which endpoints are being used and makes the code more readable.
+
+### Example API Endpoints:
+1. **OrderController**:
+    - GET `/api/orders/{id}`
+    - POST `/api/orders/place`
+    - GET `/api/orders/all`
+
+2. **ProductController**:
+    - GET `/api/products/{id}`
+    - POST `/api/products/add`
+    - PUT `/api/products/update/{id}`
+    - DELETE `/api/products/delete/{id}`
+    - GET `/api/products/all`
+
+3. **UserController**:
+    - GET `/api/users/{id}`
+    - POST `/api/users/create`
+    - PUT `/api/users/update/{id}`
+    - DELETE `/api/users/delete/{id}`
+
+4. **WishListController**:
+    - POST `/api/wishlists/add`
+    - GET `/api/wishlists/user/{userId}`
+
+5. **ReviewController**:
+    - POST `/api/reviews/add`
+    - GET `/api/reviews/product/{productId}`
+    - DELETE `/api/reviews/delete/{id}`
