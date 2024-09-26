@@ -5,13 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
+@SuperBuilder
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 
 @Entity
 @Table(name = "users")
@@ -30,19 +31,19 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private UserRole role;
 
-    @OneToMany(mappedBy = "buyer")
+    @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "user")
     private List<Product> products;
 
-    @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)  // mappedBy "user" olmalı
     private About about;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<WishList> wishLists;
 
-    @OneToMany(mappedBy = "courier")
+    @OneToMany(mappedBy = "user")
     private List<Shipment> shipments;
 
     public enum UserRole {

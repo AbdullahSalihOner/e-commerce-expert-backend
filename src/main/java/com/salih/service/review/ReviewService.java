@@ -61,12 +61,12 @@ public class ReviewService implements IReviewService {
         Product product = productRepository.findById(reviewRequestDto.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + reviewRequestDto.getProductId()));
 
-        User buyer = userRepository.findById(reviewRequestDto.getBuyerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Buyer not found with ID: " + reviewRequestDto.getBuyerId()));
+        User buyer = userRepository.findById(reviewRequestDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Buyer not found with ID: " + reviewRequestDto.getUserId()));
 
         Review review = reviewMapper.toEntity(reviewRequestDto);
         review.setProduct(product);
-        review.setBuyer(buyer);
+        review.setUser(buyer);
 
         reviewRepository.save(review);
         logger.info("Review added successfully with ID: {}", review.getId());

@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
-    List<Shipment> findByCourierId(Long courierId);
+    List<Shipment> findByUserId(Long userId);
     List<Shipment> findByShipmentStatus(Shipment.ShipmentStatus status);
 }

@@ -5,12 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
+@SuperBuilder
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 
 @Entity
 @Table(name = "reviews")
@@ -23,6 +24,10 @@ public class Review extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)  // Alıcı User
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "about_id", nullable = true)
+    private About about;
 
     @Column(nullable = false)
     private Integer rating;
