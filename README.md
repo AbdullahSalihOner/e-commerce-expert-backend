@@ -347,3 +347,44 @@ In this step, we created REST API endpoints for all core services in the applica
 - **RESTful API**: Controllers expose a RESTful API to allow clients to interact with the application via standard HTTP methods.
 - **Modular Structure**: Each controller is responsible for handling requests related to a specific entity, improving the organization and scalability of the application.
 - **Annotation-Based Configuration**: Spring annotations simplify the process of defining API endpoints and mapping them to controller methods.
+
+
+## Step 10: Added Rate Limiting to Controller Layer
+
+In this step, we added rate limiting to the controller layer using Bucket4j. Each API has a limit of 100 requests per minute. If the limit is exceeded, the API responds with HTTP 429 (Too Many Requests).
+
+### API Endpoints with Rate Limiting:
+
+1. **UserController**:
+    - GET: `/api/users/all`
+    - GET: `/api/users/{id}`
+    - POST: `/api/users/add`
+    - PUT: `/api/users/update/{id}`
+    - DELETE: `/api/users/delete/{id}`
+
+2. **ProductController**:
+    - GET: `/api/products/all`
+    - GET: `/api/products/{id}`
+    - GET: `/api/products/category/{categoryId}`
+    - POST: `/api/products/add`
+    - PUT: `/api/products/update/{id}`
+    - DELETE: `/api/products/delete/{id}`
+
+3. **OrderController**:
+    - GET: `/api/orders/all`
+    - GET: `/api/orders/{id}`
+    - POST: `/api/orders/place`
+
+4. **ReviewController**:
+    - GET: `/api/reviews/all`
+    - GET: `/api/reviews/{id}`
+    - POST: `/api/reviews/add`
+
+5. **WishListController**:
+    - GET: `/api/wishlists/all`
+    - GET: `/api/wishlists/{id}`
+    - POST: `/api/wishlists/add`
+
+### Rate Limiting:
+- Each API endpoint is limited to 100 requests per minute using Bucket4j.
+- If the rate limit is exceeded, the API responds with **HTTP 429 (Too Many Requests)**.
