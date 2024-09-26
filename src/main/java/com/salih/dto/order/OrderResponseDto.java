@@ -11,16 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OrderResponseDto {
-
     private Long id;
-
-    private String buyerName;
-
+    private String userName;  // Buyer User
     private List<String> productNames;
-
     private Double totalAmount;
-
     private LocalDateTime orderDate;
-
-    private Order.OrderStatus status;
+    private String status;
 }

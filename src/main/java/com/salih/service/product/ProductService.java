@@ -80,12 +80,12 @@ public class ProductService implements IProductService {
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + productDto.getCategoryId()));
 
-        User seller = userRepository.findById(productDto.getSellerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with ID: " + productDto.getSellerId()));
+        User seller = userRepository.findById(productDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with ID: " + productDto.getUserId()));
 
         Product product = productMapper.toEntity(productDto);
         product.setCategory(category);
-        product.setSeller(seller);
+        product.setUser(seller);
 
         productRepository.save(product);
         logger.info("Product added successfully with ID: {}", product.getId());
@@ -100,8 +100,8 @@ public class ProductService implements IProductService {
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + productDto.getCategoryId()));
 
-        User seller = userRepository.findById(productDto.getSellerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with ID: " + productDto.getSellerId()));
+        User seller = userRepository.findById(productDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with ID: " + productDto.getUserId()));
 
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
@@ -109,7 +109,7 @@ public class ProductService implements IProductService {
         product.setStockQuantity(productDto.getStockQuantity());
         product.setImages(productDto.getImages());
         product.setCategory(category);
-        product.setSeller(seller);
+        product.setUser(seller);
 
         productRepository.save(product);
         logger.info("Product updated successfully with ID: {}", id);

@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface WishListMapper {
 
-    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "userId", target = "user.id")  // DTO'daki userId'den WishList entity'sindeki user.id'ye
     WishList toEntity(WishListRequestDto wishListRequestDto);
 
-    @Mapping(source = "user.name", target = "userName")
+    @Mapping(source = "user.name", target = "userName")  // Entity'deki user.name'den DTO'daki userName'e
     @Mapping(target = "productNames", source = "products", qualifiedByName = "mapProductNames")
     WishListResponseDto toDto(WishList wishList);
 

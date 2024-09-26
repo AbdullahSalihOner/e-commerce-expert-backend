@@ -9,11 +9,11 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
 
-    @Mapping(source = "product.id", target = "productId")
-    @Mapping(source = "buyer.id", target = "buyerId")
+    @Mapping(source = "productId", target = "product.id")
+    @Mapping(source = "userId", target = "user.id")  // DTO'daki userId'den Review entity'sindeki user.id'ye
     Review toEntity(ReviewRequestDto reviewRequestDto);
 
     @Mapping(source = "product.name", target = "productName")
-    @Mapping(source = "buyer.name", target = "buyerName")
+    @Mapping(source = "user.name", target = "userName")  // Entity'deki user.name'den DTO'daki userName'e
     ReviewResponseDto toDto(Review review);
 }

@@ -19,8 +19,8 @@ import java.util.List;
 public class Cart extends BaseEntity {
 
     @OneToOne
-    @JoinColumn(name = "buyer_id", nullable = false)
-    private User buyer;
+    @JoinColumn(name = "user_id", nullable = false)  // Alıcı User
+    private User user;
 
     @ManyToMany
     @JoinTable(

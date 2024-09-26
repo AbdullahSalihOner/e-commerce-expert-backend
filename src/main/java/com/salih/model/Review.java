@@ -21,12 +21,8 @@ public class Review extends BaseEntity {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "buyer_id", nullable = false)
-    private User buyer;
-
-    @ManyToOne
-    @JoinColumn(name = "about_id", nullable = true)
-    private About about;
+    @JoinColumn(name = "user_id", nullable = false)  // Alıcı User
+    private User user;
 
     @Column(nullable = false)
     private Integer rating;

@@ -10,24 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ProductRequestDto {
-
-    @NotNull
     private String name;
-
-    @NotNull
     private String description;
-
-    @NotNull
     private Double price;
-
-    @NotNull
     private Integer stockQuantity;
-
-    @NotNull
     private Long categoryId;
-
-    @NotNull
-    private Long sellerId;
-
+    private Long userId;  // Seller için User ID'sini kullanıyoruz
     private List<String> images;
 }

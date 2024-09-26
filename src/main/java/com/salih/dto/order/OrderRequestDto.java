@@ -10,13 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OrderRequestDto {
-
-    @NotNull
-    private Long buyerId;
-
-    @NotNull
+    private Long userId;
     private List<Long> productIds;
-
-    @NotNull
     private Double totalAmount;
 }

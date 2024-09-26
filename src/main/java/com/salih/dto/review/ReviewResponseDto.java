@@ -6,15 +6,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class ReviewResponseDto {
-
     private Long id;
-
     private String productName;
-
-    private String buyerName;
-
+    private String userName;  //buyer için  User adını kullanıyoruz
     private Integer rating;
-
     private String comment;
 }

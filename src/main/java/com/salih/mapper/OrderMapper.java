@@ -13,10 +13,11 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
-    @Mapping(source = "buyer.id", target = "buyerId")
+
+    @Mapping(source = "userId", target = "user.id") // DTO'daki userId'den Order entity'sindeki user.id'ye
     Order toEntity(OrderRequestDto orderRequestDto);
 
-    @Mapping(source = "buyer.name", target = "buyerName")
+    @Mapping(source = "user.name", target = "userName") // Entity'deki user.name'den DTO'daki userName'e
     @Mapping(target = "productNames", source = "products", qualifiedByName = "mapProductNames")
     OrderResponseDto toDto(Order order);
 

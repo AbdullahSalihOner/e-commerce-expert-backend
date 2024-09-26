@@ -22,8 +22,8 @@ public class Shipment extends BaseEntity {
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "courier_id", nullable = false)
-    private User courier; // Kargo kuryesi
+    @JoinColumn(name = "user_id", nullable = false)  // Kurye User
+    private User user;
 
     @Column(nullable = false)
     private String trackingNumber;

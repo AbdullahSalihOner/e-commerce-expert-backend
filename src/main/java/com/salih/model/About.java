@@ -19,8 +19,8 @@ import java.util.List;
 public class About extends BaseEntity {
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User seller;
+    @JoinColumn(name = "user_id", nullable = false)  // Satıcı User
+    private User user;
 
     @Column(nullable = false)
     private String location;

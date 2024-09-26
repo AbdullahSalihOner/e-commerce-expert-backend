@@ -59,8 +59,8 @@ public class OrderService implements IOrderService {
 
     @Override
     public Result placeOrder(OrderRequestDto orderRequestDto) {
-        User buyer = userRepository.findById(orderRequestDto.getBuyerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Buyer not found with ID: " + orderRequestDto.getBuyerId()));
+        User buyer = userRepository.findById(orderRequestDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Buyer not found with ID: " + orderRequestDto.getUserId()));
 
         List<Product> products = productRepository.findAllById(orderRequestDto.getProductIds());
 
@@ -70,7 +70,7 @@ public class OrderService implements IOrderService {
         }
 
         Order order = orderMapper.toEntity(orderRequestDto);
-        order.setBuyer(buyer);
+        order.setUser(buyer);
         order.setProducts(products);
         order.setStatus(Order.OrderStatus.PENDING);
         order.setOrderDate(LocalDateTime.now());

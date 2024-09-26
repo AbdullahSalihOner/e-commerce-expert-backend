@@ -10,10 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class WishListRequestDto {
-
-    @NotNull
-    private Long userId;
-
-    @NotNull
+    private Long userId;  // User ID'sini kullanıyoruz
     private List<Long> productIds;
 }

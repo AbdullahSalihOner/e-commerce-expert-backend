@@ -8,11 +8,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class WishListResponseDto {
-
     private Long id;
-
-    private String userName;
-
+    private String userName;  // User adını kullanıyoruz
     private List<String> productNames;
 }

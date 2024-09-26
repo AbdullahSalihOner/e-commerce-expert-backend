@@ -35,17 +35,17 @@ public class Product extends BaseEntity {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "seller_id", nullable = false)
-    private User seller;
+    @JoinColumn(name = "user_id", nullable = false)  // Satıcı User
+    private User user;
+
+    @ElementCollection
+    private List<String> images;
 
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;
 
     @ManyToMany(mappedBy = "products")
     private List<Order> orders;
-
-    @ElementCollection
-    private List<String> images; // Ürün görselleri
 
     @ManyToMany(mappedBy = "products")
     private List<WishList> wishLists;

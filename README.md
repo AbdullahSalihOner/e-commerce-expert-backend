@@ -388,3 +388,28 @@ In this step, we added rate limiting to the controller layer using Bucket4j. Eac
 ### Rate Limiting:
 - Each API endpoint is limited to 100 requests per minute using Bucket4j.
 - If the rate limit is exceeded, the API responds with **HTTP 429 (Too Many Requests)**.
+
+
+## Step 11: Updated Model Relationships with User Entity
+
+In this step, we have ensured that the `User` entity is consistently referenced across all related models. All layers, including Models, DTOs, Mappers, Services, and Controllers, have been updated to use `User` with the same name for related entities. The changes allow for easier management of user-related data across the system.
+
+### Changes Made:
+- **Models**: Updated all models that have a relationship with the `User` entity. The `User` reference now consistently uses the `user` field for relationships.
+- **DTOs**: All DTOs now handle `userId` and `userName` fields for entities related to the `User` entity.
+- **Mappers**: Updated MapStruct mappers to map `userId` and `userName` between DTOs and entities.
+- **Services**: Updated service methods to handle the updated `User` references in models and DTOs.
+- **Controllers**: Updated controllers to manage user-related operations with the new structure.
+
+### Example API Endpoints:
+1. **OrderController**:
+    - GET `/api/orders/{id}`: Fetches order details by order ID, including user information.
+    - POST `/api/orders/place`: Places a new order, associating it with a user.
+
+2. **ProductController**:
+    - GET `/api/products/{id}`: Fetches product details by product ID, including user (seller) information.
+    - POST `/api/products/add`: Adds a new product, associating it with a user (seller).
+
+### Benefits:
+- **Consistency**: All layers in the system now consistently use `User` as the entity name, making it easier to understand and maintain relationships with the `User` entity.
+- **Clear Mapping**: DTOs and Mappers clearly map `userId` and `userName`, making data handling more straightforward.

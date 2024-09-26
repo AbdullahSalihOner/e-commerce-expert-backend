@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Address extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)  // Kullanıcı User
     private User user;
 
     @Column(nullable = false)

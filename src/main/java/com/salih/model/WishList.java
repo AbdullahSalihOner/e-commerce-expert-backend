@@ -18,7 +18,7 @@ import java.util.List;
 public class WishList extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)  // Kullanıcı User
     private User user;
 
     @ManyToMany

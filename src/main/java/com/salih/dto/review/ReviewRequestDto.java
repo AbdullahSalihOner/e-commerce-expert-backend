@@ -7,17 +7,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class ReviewRequestDto {
-
-    @NotNull
     private Long productId;
-
-    @NotNull
-    private Long buyerId;
-
-    @NotNull
+    private Long userId;  // buyer için User ID'sini kullanıyoruz
     private Integer rating;
-
-    @NotNull
     private String comment;
 }

@@ -120,7 +120,14 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.5.5.Final</version>
+            <version>1.5.3.Final</version> <!-- Kullandığınız versiyonu burada kontrol edin -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.3.Final</version> <!-- Aynı versiyonda olmalı -->
+            <scope>provided</scope>
         </dependency>
 
 
