@@ -1,13 +1,16 @@
 package com.salih.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
-@Getter
+
+
+@Data
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id

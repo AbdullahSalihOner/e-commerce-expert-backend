@@ -236,3 +236,58 @@ In this step, we used MapStruct to create mappers for converting between entitie
 - **Automated Mapping**: MapStruct simplifies and automates the conversion process between entities and DTOs, reducing boilerplate code.
 - **Custom Mappings**: Allows for custom field mappings where necessary, providing flexibility in how data is transferred between layers.
 - **Integration with Spring**: MapStruct integrates seamlessly with Spring, making it easy to inject and use mappers throughout the application.
+
+
+## Step 8: Created Service Layer with Logging and Result Handling
+
+In this step, we implemented the service layer for business logic, interacting with repositories and mappers. Additionally, we introduced logging to track application behavior and created **Result** and **DataResult** classes for standardized response handling.
+
+### What we did:
+1. Implemented services for the following entities:
+   - **UserService**:
+      - Provides methods for listing, adding, updating, and deleting users.
+   - **ProductService**:
+      - Provides methods for listing, adding, updating, and deleting products.
+   - **OrderService**:
+      - Allows placing orders and retrieving order details.
+   - **ReviewService**:
+      - Handles adding and retrieving product reviews.
+   - **WishListService**:
+      - Manages the user's wish lists, allowing users to save products for later.
+
+2. Integrated logging:
+   - **SLF4J Logger**: Used to log important events like successful operations, warnings, and errors.
+   - **Log Levels**:
+      - `info`: Logs successful operations (e.g., "Product added successfully").
+      - `warn`: Logs potential issues (e.g., "No products found").
+      - `error`: Logs errors and exceptions (e.g., "Product not found with ID").
+
+3. Introduced **Result** and **DataResult** for standardized response handling:
+   - **Result**:
+      - Provides a way to return a success or failure message with an associated status code.
+      - Used in service methods to indicate if an operation was successful or failed.
+   - **DataResult**:
+      - Extends `Result` to include the actual data being returned from the service layer (e.g., product details).
+      - Provides both the operation status and the resulting data (if available).
+
+### Used Structures, Annotations, and Libraries:
+
+1. **`@Service` Annotation**:
+   - Marks the class as a service component to handle business logic.
+   - Makes the class available for dependency injection in the application context.
+
+2. **`@RequiredArgsConstructor`**:
+   - Provided by Lombok to automatically generate a constructor for final fields, simplifying dependency injection.
+
+3. **`Logger`**:
+   - Used for tracking and logging application behavior.
+   - Key operations are logged to provide insights into the application’s flow.
+
+4. **Result and DataResult**:
+   - **Result**: Used to represent the outcome of an operation, whether it was successful or not.
+   - **DataResult**: Extends `Result` and includes data (such as a list of products or a specific user) as part of the response.
+
+### Benefits:
+- **Centralized Business Logic**: The service layer keeps business logic separate from controllers and repositories, improving code organization and maintainability.
+- **Logging**: Logs provide real-time tracking and diagnostics of application behavior, making it easier to monitor and debug issues.
+- **Standardized Responses**: Using `Result` and `DataResult` ensures a consistent way of handling and returning operation outcomes across the application.
