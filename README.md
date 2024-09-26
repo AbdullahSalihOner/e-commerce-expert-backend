@@ -291,3 +291,59 @@ In this step, we implemented the service layer for business logic, interacting w
 - **Centralized Business Logic**: The service layer keeps business logic separate from controllers and repositories, improving code organization and maintainability.
 - **Logging**: Logs provide real-time tracking and diagnostics of application behavior, making it easier to monitor and debug issues.
 - **Standardized Responses**: Using `Result` and `DataResult` ensures a consistent way of handling and returning operation outcomes across the application.
+
+
+
+## Step 9: Created Controller Layer with API Endpoints
+
+In this step, we created REST API endpoints for all core services in the application. The endpoints are grouped based on the resources they manage (e.g., users, products, orders, etc.).
+
+### What we did:
+1. Created REST controllers for the following entities:
+   - **UserController**: Handles user-related operations (listing, adding, updating, and deleting users).
+      - GET: `/api/users/all`
+      - GET: `/api/users/{id}`
+      - POST: `/api/users/add`
+      - PUT: `/api/users/update/{id}`
+      - DELETE: `/api/users/delete/{id}`
+   - **ProductController**: Manages product-related operations (listing, adding, updating, and deleting products).
+      - GET: `/api/products/all`
+      - GET: `/api/products/{id}`
+      - GET: `/api/products/category/{categoryId}`
+      - POST: `/api/products/add`
+      - PUT: `/api/products/update/{id}`
+      - DELETE: `/api/products/delete/{id}`
+   - **OrderController**: Handles operations related to placing and viewing orders.
+      - GET: `/api/orders/all`
+      - GET: `/api/orders/{id}`
+      - POST: `/api/orders/place`
+   - **ReviewController**: Manages adding and retrieving reviews for products or sellers.
+      - GET: `/api/reviews/all`
+      - GET: `/api/reviews/{id}`
+      - POST: `/api/reviews/add`
+   - **WishListController**: Allows users to manage their wish lists.
+      - GET: `/api/wishlists/all`
+      - GET: `/api/wishlists/{id}`
+      - POST: `/api/wishlists/add`
+
+### Used Structures, Annotations, and Libraries:
+
+1. **`@RestController`**:
+   - Marks the class as a Spring REST controller that handles HTTP requests and returns HTTP responses.
+
+2. **`@RequestMapping`**:
+   - Defines the base URL mapping for each controller (e.g., `/api/users` for `UserController`).
+
+3. **`@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`**:
+   - Defines specific HTTP methods for each endpoint (GET, POST, PUT, DELETE).
+
+4. **`ResponseEntity`**:
+   - Used to wrap responses with HTTP status codes and body content.
+
+5. **`@Valid`**:
+   - Validates request bodies, ensuring that required fields are present and correctly formatted.
+
+### Benefits:
+- **RESTful API**: Controllers expose a RESTful API to allow clients to interact with the application via standard HTTP methods.
+- **Modular Structure**: Each controller is responsible for handling requests related to a specific entity, improving the organization and scalability of the application.
+- **Annotation-Based Configuration**: Spring annotations simplify the process of defining API endpoints and mapping them to controller methods.
