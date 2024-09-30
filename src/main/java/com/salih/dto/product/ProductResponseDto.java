@@ -8,7 +8,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductResponseDto {
+public class ProductResponseDto  {
     private Long id;
     private String name;
     private String description;

@@ -2,6 +2,7 @@ package com.salih.dto.wishList;
 
 import lombok.*;
 
+
 import java.util.List;
 
 @Data
@@ -9,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 
-public class WishListResponseDto {
+public class WishListResponseDto  {
     private Long id;
     private String userName;  // User adını kullanıyoruz
     private List<String> productNames;

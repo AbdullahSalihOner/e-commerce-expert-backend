@@ -9,6 +9,8 @@ import com.salih.service.user.IUserService;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,15 +23,16 @@ import java.util.List;
 @RestController
 @RequestMapping(ApiEndpoints.USER_BASE)
 @RequiredArgsConstructor
+@Tag(name = "User Controller", description = "APIs for managing users")
 public class UserController {
 
     private final IUserService userService;
 
-    // Rate limiting bucket: 100 requests per minute
     private final Bucket bucket = Bucket.builder()
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
             .build();
 
+    @Operation(summary = "Get all users", description = "Returns a list of all users.")
     @GetMapping(ApiEndpoints.USER_GET_ALL)
     public ResponseEntity<DataResult<List<UserResponseDto>>> getAllUsers() {
         if (!bucket.tryConsume(1)) {
@@ -39,6 +42,7 @@ public class UserController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
+    @Operation(summary = "Get user by ID", description = "Returns a single user based on the provided ID.")
     @GetMapping(ApiEndpoints.USER_GET_BY_ID)
     public ResponseEntity<DataResult<UserResponseDto>> getUserById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
@@ -48,6 +52,7 @@ public class UserController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
+    @Operation(summary = "Create new user", description = "Creates a new user with the provided data.")
     @PostMapping(ApiEndpoints.USER_CREATE)
     public ResponseEntity<Result> addUser(@RequestBody @Valid UserRequestDto userRequestDto) {
         if (!bucket.tryConsume(1)) {
@@ -57,6 +62,7 @@ public class UserController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(result);
     }
 
+    @Operation(summary = "Update user", description = "Updates an existing user based on the provided ID and data.")
     @PutMapping(ApiEndpoints.USER_UPDATE)
     public ResponseEntity<Result> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequestDto userRequestDto) {
         if (!bucket.tryConsume(1)) {
@@ -66,6 +72,7 @@ public class UserController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
     }
 
+    @Operation(summary = "Delete user", description = "Deletes a user based on the provided ID.")
     @DeleteMapping(ApiEndpoints.USER_DELETE)
     public ResponseEntity<Result> deleteUser(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {

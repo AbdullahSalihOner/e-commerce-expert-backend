@@ -574,3 +574,51 @@ To run Redis on Docker, use the following commands:
 ```bash
 docker pull redis
 docker run -d --name redis-container -p 6379:6379 redis
+```
+
+## Step 16: Added Swagger/OpenAPI Annotations for API Documentation
+
+In this step, we enhanced the documentation of our API using Swagger/OpenAPI annotations. We applied the following changes across all controller classes:
+
+### Changes Made:
+
+1. **Tagging Controllers with @Tag**:
+   - Each controller now has a `@Tag` annotation that describes the purpose of the controller (e.g., User Controller, Order Controller, etc.).
+   - This helps in organizing the API documentation and providing meaningful descriptions for API consumers.
+
+2. **Documenting API Methods with @Operation**:
+   - Each API method (GET, POST, PUT, DELETE) is annotated with `@Operation`, providing a summary and description of what the method does.
+   - This gives API users clear insights into each method's purpose and behavior, improving API discoverability.
+
+### Benefits:
+- **Improved API Documentation**: With the `@Tag` and `@Operation` annotations, the generated API documentation becomes more user-friendly and informative.
+- **Better Organization**: Grouping API endpoints by their logical controller helps in understanding the API structure better.
+- **Enhanced Readability**: Descriptive summaries and explanations for each API method make it easier for developers to interact with the API.
+
+### Example API Endpoints:
+1. **UserController**:
+   - GET `/api/users/{id}`: Retrieves a user by ID.
+   - POST `/api/users/create`: Creates a new user.
+   - DELETE `/api/users/delete/{id}`: Deletes a user by ID.
+
+2. **OrderController**:
+   - GET `/api/orders/{id}`: Retrieves an order by ID.
+   - POST `/api/orders/place`: Places a new order.
+   - DELETE `/api/orders/cancel/{id}`: Cancels an order by ID.
+   
+3. **ProductController**:
+   - GET `/api/products/{id}`: Retrieves a product by ID.
+   - POST `/api/products/add`: Adds a new product.
+   - DELETE `/api/products/delete/{id}`: Deletes a product by ID.
+
+4. **ReviewController**:
+   - GET `/api/reviews/{id}`: Retrieves a review by ID.
+   - POST `/api/reviews/add`: Adds a new review.
+   - DELETE `/api/reviews/delete/{id}`: Deletes a review by ID.
+
+5. **WishListController**:
+   - GET `/api/wishlists/{id}`: Retrieves a wishlist by user ID.
+   - POST `/api/wishlists/add`: Adds a new wishlist.
+   - DELETE `/api/wishlists/delete/{id}`: Deletes a wishlist by ID.
+
+

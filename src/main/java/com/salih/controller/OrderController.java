@@ -9,6 +9,8 @@ import com.salih.service.order.IOrderService;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,15 +23,16 @@ import java.util.List;
 @RestController
 @RequestMapping(ApiEndpoints.ORDER_BASE)
 @RequiredArgsConstructor
+@Tag(name = "Order Controller", description = "APIs for managing orders")
 public class OrderController {
 
     private final IOrderService orderService;
 
-    // Rate limiting bucket: 100 requests per minute
     private final Bucket bucket = Bucket.builder()
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
             .build();
 
+    @Operation(summary = "Get all orders", description = "Returns a list of all orders.")
     @GetMapping(ApiEndpoints.ORDER_GET_ALL)
     public ResponseEntity<DataResult<List<OrderResponseDto>>> getAllOrders() {
         if (!bucket.tryConsume(1)) {
@@ -39,6 +42,7 @@ public class OrderController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
+    @Operation(summary = "Get order by ID", description = "Returns a single order based on the provided ID.")
     @GetMapping(ApiEndpoints.ORDER_GET_BY_ID)
     public ResponseEntity<DataResult<OrderResponseDto>> getOrderById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
@@ -48,6 +52,7 @@ public class OrderController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
     }
 
+    @Operation(summary = "Place new order", description = "Creates a new order with the provided data.")
     @PostMapping(ApiEndpoints.ORDER_PLACE)
     public ResponseEntity<Result> placeOrder(@RequestBody @Valid OrderRequestDto orderRequestDto) {
         if (!bucket.tryConsume(1)) {
@@ -57,6 +62,7 @@ public class OrderController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(result);
     }
 
+    @Operation(summary = "Cancel order", description = "Cancels an existing order based on the provided ID.")
     @DeleteMapping(ApiEndpoints.ORDER_CANCEL)
     public ResponseEntity<Result> cancelOrder(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {

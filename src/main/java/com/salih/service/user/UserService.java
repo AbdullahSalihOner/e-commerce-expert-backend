@@ -66,7 +66,7 @@ public class UserService implements IUserService {
         }
 
         // Password'u önceden var olup olmadığını kontrol et
-        if (userRepository.existsByN(userRequestDto.getName())) {
+        if (userRepository.existsByPassword(userRequestDto.getName())) {
             logger.error("Password already in use: {}", userRequestDto.getPassword());
             throw new DuplicateResourceException("Password is already in use");
         }
