@@ -3,8 +3,11 @@ package com.salih.controller;
 import com.salih.constant.ApiEndpoints;
 import com.salih.dto.user.UserRequestDto;
 import com.salih.dto.user.UserResponseDto;
+import com.salih.dto.user.UserResponseWithBreadcrumbDto;
+import com.salih.model.BreadcrumbItem;
 import com.salih.result.DataResult;
 import com.salih.result.Result;
+import com.salih.service.BreadcrumbService;
 import com.salih.service.user.IUserService;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
@@ -27,6 +30,7 @@ import java.util.List;
 public class UserController {
 
     private final IUserService userService;
+    private final BreadcrumbService breadcrumbService;
 
     private final Bucket bucket = Bucket.builder()
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
@@ -34,22 +38,30 @@ public class UserController {
 
     @Operation(summary = "Get all users", description = "Returns a list of all users.")
     @GetMapping(ApiEndpoints.USER_GET_ALL)
-    public ResponseEntity<DataResult<List<UserResponseDto>>> getAllUsers() {
+    public ResponseEntity<UserResponseWithBreadcrumbDto> getAllUsers() {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/users");
+
         DataResult<List<UserResponseDto>> result = userService.getAllUsers();
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new UserResponseWithBreadcrumbDto(result.getData(), breadcrumbs));
     }
 
     @Operation(summary = "Get user by ID", description = "Returns a single user based on the provided ID.")
     @GetMapping(ApiEndpoints.USER_GET_BY_ID)
-    public ResponseEntity<DataResult<UserResponseDto>> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseWithBreadcrumbDto> getUserById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/users/" + id);
+
         DataResult<UserResponseDto> result = userService.getUserById(id);
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new UserResponseWithBreadcrumbDto(List.of(result.getData()), breadcrumbs));
     }
 
     @Operation(summary = "Create new user", description = "Creates a new user with the provided data.")

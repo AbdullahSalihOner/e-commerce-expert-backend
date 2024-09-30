@@ -3,8 +3,11 @@ package com.salih.controller;
 import com.salih.constant.ApiEndpoints;
 import com.salih.dto.product.ProductRequestDto;
 import com.salih.dto.product.ProductResponseDto;
+import com.salih.dto.product.ProductResponseWithBreadcrumbDto;
+import com.salih.model.BreadcrumbItem;
 import com.salih.result.DataResult;
 import com.salih.result.Result;
+import com.salih.service.BreadcrumbService;
 import com.salih.service.product.IProductService;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
@@ -27,6 +30,7 @@ import java.util.List;
 public class ProductController {
 
     private final IProductService productService;
+    private final BreadcrumbService breadcrumbService;
 
     private final Bucket bucket = Bucket.builder()
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
@@ -34,32 +38,44 @@ public class ProductController {
 
     @Operation(summary = "Get all products", description = "Returns a list of all products.")
     @GetMapping(ApiEndpoints.PRODUCT_GET_ALL)
-    public ResponseEntity<DataResult<List<ProductResponseDto>>> getAllProducts() {
+    public ResponseEntity<ProductResponseWithBreadcrumbDto> getAllProducts() {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/products");
+
         DataResult<List<ProductResponseDto>> result = productService.getAllProducts();
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new ProductResponseWithBreadcrumbDto(result.getData(), breadcrumbs));
     }
 
     @Operation(summary = "Get product by ID", description = "Returns a single product based on the provided ID.")
     @GetMapping(ApiEndpoints.PRODUCT_GET_BY_ID)
-    public ResponseEntity<DataResult<ProductResponseDto>> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponseWithBreadcrumbDto> getProductById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/products/" + id);
+
         DataResult<ProductResponseDto> result = productService.getProductById(id);
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new ProductResponseWithBreadcrumbDto(List.of(result.getData()), breadcrumbs));
     }
 
     @Operation(summary = "Get products by category", description = "Returns a list of products in the provided category.")
     @GetMapping(ApiEndpoints.PRODUCT_GET_BY_CATEGORY)
-    public ResponseEntity<DataResult<List<ProductResponseDto>>> getProductsByCategory(@PathVariable Long categoryId) {
+    public ResponseEntity<ProductResponseWithBreadcrumbDto> getProductsByCategory(@PathVariable Long categoryId) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/products/category/" + categoryId);
+
         DataResult<List<ProductResponseDto>> result = productService.getProductsByCategory(categoryId);
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new ProductResponseWithBreadcrumbDto(result.getData(), breadcrumbs));
     }
 
     @Operation(summary = "Add new product", description = "Creates a new product with the provided data.")

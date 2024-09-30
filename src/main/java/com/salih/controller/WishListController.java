@@ -3,8 +3,11 @@ package com.salih.controller;
 import com.salih.constant.ApiEndpoints;
 import com.salih.dto.wishList.WishListRequestDto;
 import com.salih.dto.wishList.WishListResponseDto;
+import com.salih.dto.wishList.WishListResponseWithBreadcrumbDto;
+import com.salih.model.BreadcrumbItem;
 import com.salih.result.DataResult;
 import com.salih.result.Result;
+import com.salih.service.BreadcrumbService;
 import com.salih.service.wishList.IWishListService;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
@@ -27,6 +30,7 @@ import java.util.List;
 public class WishListController {
 
     private final IWishListService wishListService;
+    private final BreadcrumbService breadcrumbService;
 
     private final Bucket bucket = Bucket.builder()
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
@@ -34,22 +38,30 @@ public class WishListController {
 
     @Operation(summary = "Get all wish lists", description = "Returns a list of all wish lists.")
     @GetMapping(ApiEndpoints.WISHLIST_GET_ALL)
-    public ResponseEntity<DataResult<List<WishListResponseDto>>> getAllWishLists() {
+    public ResponseEntity<WishListResponseWithBreadcrumbDto> getAllWishLists() {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/wishlists");
+
         DataResult<List<WishListResponseDto>> result = wishListService.getAllWishLists();
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new WishListResponseWithBreadcrumbDto(result.getData(), breadcrumbs));
     }
 
     @Operation(summary = "Get wish list by user ID", description = "Returns a wish list for the provided user ID.")
     @GetMapping(ApiEndpoints.WISHLIST_GET_BY_USER_ID)
-    public ResponseEntity<DataResult<WishListResponseDto>> getWishListById(@PathVariable Long id) {
+    public ResponseEntity<WishListResponseWithBreadcrumbDto> getWishListById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/wishlists/" + id);
+
         DataResult<WishListResponseDto> result = wishListService.getWishListById(id);
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new WishListResponseWithBreadcrumbDto(List.of(result.getData()), breadcrumbs));
     }
 
     @Operation(summary = "Add new wish list", description = "Creates a new wish list for a user.")

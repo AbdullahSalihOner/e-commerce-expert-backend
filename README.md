@@ -622,3 +622,94 @@ In this step, we enhanced the documentation of our API using Swagger/OpenAPI ann
    - DELETE `/api/wishlists/delete/{id}`: Deletes a wishlist by ID.
 
 
+
+## 17. Step - Breadcrumb and Rate Limiting Integration in Controllers
+
+### What We Did:
+In this step, we have integrated breadcrumb functionality and rate limiting into all our controller classes (`UserController`, `WishListController`, `ReviewController`, `ProductController`, and `OrderController`). Breadcrumbs provide a better navigation experience by showing the user's path in the application, while rate limiting ensures that the system is protected from too many requests in a short period.
+
+#### Key Changes:
+1. **Breadcrumb Integration**:
+   - Each controller now generates breadcrumb trails based on the current API path.
+   - Breadcrumbs are returned in the API response, making it easier to track user flow and navigation.
+
+2. **Rate Limiting**:
+   - We implemented rate limiting to all controller methods using the `Bucket4j` library.
+   - The limit is set to 100 requests per minute to prevent abuse or excessive requests.
+
+3. **OpenAPI Documentation**:
+   - Added `@Tag` annotation for each controller to group related APIs together in Swagger.
+   - Added `@Operation` annotation for each method to provide a detailed description in Swagger UI.
+
+### Controllers and API Endpoints:
+
+#### 1. **UserController**:
+- **Base URL:** `/api/users`
+- **Endpoints:**
+   - `GET /all` – Fetch all users with breadcrumb trail.
+   - `GET /{id}` – Fetch user by ID with breadcrumb trail.
+   - `POST /create` – Create a new user.
+   - `PUT /update/{id}` – Update a user.
+   - `DELETE /delete/{id}` – Delete a user.
+
+#### 2. **WishListController**:
+- **Base URL:** `/api/wishlists`
+- **Endpoints:**
+   - `GET /all` – Fetch all wish lists with breadcrumb trail.
+   - `GET /user/{id}` – Fetch wish list by user ID with breadcrumb trail.
+   - `POST /add` – Add a new wish list.
+   - `DELETE /delete/{id}` – Delete a wish list.
+
+#### 3. **ReviewController**:
+- **Base URL:** `/api/reviews`
+- **Endpoints:**
+   - `GET /all` – Fetch all reviews with breadcrumb trail.
+   - `GET /product/{id}` – Fetch review by product ID with breadcrumb trail.
+   - `POST /add` – Add a new review.
+   - `PUT /update/{id}` – Update a review.
+   - `DELETE /delete/{id}` – Delete a review.
+
+#### 4. **ProductController**:
+- **Base URL:** `/api/products`
+- **Endpoints:**
+   - `GET /all` – Fetch all products with breadcrumb trail.
+   - `GET /{id}` – Fetch product by ID with breadcrumb trail.
+   - `GET /category/{categoryId}` – Fetch products by category with breadcrumb trail.
+   - `POST /add` – Add a new product.
+   - `PUT /update/{id}` – Update a product.
+   - `DELETE /delete/{id}` – Delete a product.
+
+#### 5. **OrderController**:
+- **Base URL:** `/api/orders`
+- **Endpoints:**
+   - `GET /all` – Fetch all orders with breadcrumb trail.
+   - `GET /{id}` – Fetch order by ID with breadcrumb trail.
+   - `POST /place` – Place a new order.
+   - `DELETE /cancel/{id}` – Cancel an order.
+
+### Technologies Used:
+- **Bucket4j**: Implemented for rate limiting (100 requests per minute).
+- **Breadcrumb Service**: Custom breadcrumb generation to track user navigation path.
+- **Swagger Annotations** (`@Tag`, `@Operation`): Used to document and structure our API operations in Swagger UI for better API documentation.
+
+### Example API Response with Breadcrumb:
+```json
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com"
+    }
+  ],
+  "breadcrumbs": [
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "Users",
+      "url": "/users"
+    }
+  ]
+}

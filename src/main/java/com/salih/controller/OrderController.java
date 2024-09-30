@@ -3,8 +3,11 @@ package com.salih.controller;
 import com.salih.constant.ApiEndpoints;
 import com.salih.dto.order.OrderRequestDto;
 import com.salih.dto.order.OrderResponseDto;
+import com.salih.dto.order.OrderResponseWithBreadcrumbDto;
+import com.salih.model.BreadcrumbItem;
 import com.salih.result.DataResult;
 import com.salih.result.Result;
+import com.salih.service.BreadcrumbService;
 import com.salih.service.order.IOrderService;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
@@ -27,6 +30,7 @@ import java.util.List;
 public class OrderController {
 
     private final IOrderService orderService;
+    private final BreadcrumbService breadcrumbService;
 
     private final Bucket bucket = Bucket.builder()
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
@@ -34,22 +38,30 @@ public class OrderController {
 
     @Operation(summary = "Get all orders", description = "Returns a list of all orders.")
     @GetMapping(ApiEndpoints.ORDER_GET_ALL)
-    public ResponseEntity<DataResult<List<OrderResponseDto>>> getAllOrders() {
+    public ResponseEntity<OrderResponseWithBreadcrumbDto> getAllOrders() {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/orders");
+
         DataResult<List<OrderResponseDto>> result = orderService.getAllOrders();
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new OrderResponseWithBreadcrumbDto(result.getData(), breadcrumbs));
     }
 
     @Operation(summary = "Get order by ID", description = "Returns a single order based on the provided ID.")
     @GetMapping(ApiEndpoints.ORDER_GET_BY_ID)
-    public ResponseEntity<DataResult<OrderResponseDto>> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderResponseWithBreadcrumbDto> getOrderById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/orders/" + id);
+
         DataResult<OrderResponseDto> result = orderService.getOrderById(id);
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new OrderResponseWithBreadcrumbDto(List.of(result.getData()), breadcrumbs));
     }
 
     @Operation(summary = "Place new order", description = "Creates a new order with the provided data.")

@@ -3,8 +3,11 @@ package com.salih.controller;
 import com.salih.constant.ApiEndpoints;
 import com.salih.dto.review.ReviewRequestDto;
 import com.salih.dto.review.ReviewResponseDto;
+import com.salih.dto.review.ReviewResponseWithBreadcrumbDto;
+import com.salih.model.BreadcrumbItem;
 import com.salih.result.DataResult;
 import com.salih.result.Result;
+import com.salih.service.BreadcrumbService;
 import com.salih.service.review.IReviewService;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
@@ -27,6 +30,7 @@ import java.util.List;
 public class ReviewController {
 
     private final IReviewService reviewService;
+    private final BreadcrumbService breadcrumbService;
 
     private final Bucket bucket = Bucket.builder()
             .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
@@ -34,22 +38,30 @@ public class ReviewController {
 
     @Operation(summary = "Get all reviews", description = "Returns a list of all reviews.")
     @GetMapping(ApiEndpoints.REVIEW_GET_ALL)
-    public ResponseEntity<DataResult<List<ReviewResponseDto>>> getAllReviews() {
+    public ResponseEntity<ReviewResponseWithBreadcrumbDto> getAllReviews() {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/reviews");
+
         DataResult<List<ReviewResponseDto>> result = reviewService.getAllReviews();
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new ReviewResponseWithBreadcrumbDto(result.getData(), breadcrumbs));
     }
 
     @Operation(summary = "Get review by ID", description = "Returns a single review based on the provided ID.")
     @GetMapping(ApiEndpoints.REVIEW_GET_BY_PRODUCT_ID)
-    public ResponseEntity<DataResult<ReviewResponseDto>> getReviewById(@PathVariable Long id) {
+    public ResponseEntity<ReviewResponseWithBreadcrumbDto> getReviewById(@PathVariable Long id) {
         if (!bucket.tryConsume(1)) {
             return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
         }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/reviews/" + id);
+
         DataResult<ReviewResponseDto> result = reviewService.getReviewById(id);
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new ReviewResponseWithBreadcrumbDto(List.of(result.getData()), breadcrumbs));
     }
 
     @Operation(summary = "Add new review", description = "Creates a new review for a product.")
