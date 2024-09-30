@@ -16,6 +16,8 @@ import com.salih.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -48,6 +50,7 @@ public class OrderService implements IOrderService {
         return new DataResult<>(orderDtos, Result.showMessage(Result.SUCCESS, "Orders listed successfully"));
     }
 
+    @Cacheable(value = "orders", key = "#id")
     @Override
     public DataResult<OrderResponseDto> getOrderById(Long id) {
         Order order = orderRepository.findById(id)
@@ -87,5 +90,16 @@ public class OrderService implements IOrderService {
         orderRepository.save(order);
         logger.info("Order placed successfully with ID: {}", order.getId());
         return Result.showMessage(Result.SUCCESS, "Order placed successfully");
+    }
+
+    @CacheEvict(value = "orders", key = "#id")
+    @Override
+    public Result cancelOrder(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + id));
+
+        orderRepository.delete(order);
+        logger.info("Order deleted successfully with ID: {}", id);
+        return Result.showMessage(Result.SUCCESS, "Order deleted successfully");
     }
 }

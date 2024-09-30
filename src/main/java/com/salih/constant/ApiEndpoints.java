@@ -16,6 +16,7 @@ public class ApiEndpoints {
     public static final String ORDER_GET_BY_ID = "/{id}";
     public static final String ORDER_PLACE = "/place";
     public static final String ORDER_GET_ALL = "/all";
+    public static final String ORDER_CANCEL = "/cancel/{id}";
 
     // User Endpoints
     public static final String USER_BASE = "/api/users";
@@ -30,6 +31,7 @@ public class ApiEndpoints {
     public static final String WISHLIST_GET_ALL = "/all";
     public static final String WISHLIST_ADD = "/add";
     public static final String WISHLIST_GET_BY_USER_ID = "/user/{userId}";
+    public static final String WISHLIST_DELETE = "/delete/{id}";
 
     // Review Endpoints
     public static final String REVIEW_BASE = "/api/reviews";
@@ -37,6 +39,9 @@ public class ApiEndpoints {
     public static final String REVIEW_GET_ALL = "/all";
     public static final String REVIEW_GET_BY_PRODUCT_ID = "/product/{productId}";
     public static final String REVIEW_DELETE = "/delete/{id}";
+    public static final String REVIEW_UPDATE = "/update/{id}";
+
+
 
     // Other Endpoints (if applicable)
     // Add more as needed...

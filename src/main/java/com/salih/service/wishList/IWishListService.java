@@ -11,4 +11,5 @@ public interface IWishListService {
     DataResult<List<WishListResponseDto>> getAllWishLists();
     DataResult<WishListResponseDto> getWishListById(Long id);
     Result addWishList(WishListRequestDto wishListRequestDto);
+    Result deleteWishList(Long id);
 }

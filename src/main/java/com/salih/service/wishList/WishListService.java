@@ -15,6 +15,8 @@ import com.salih.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +48,7 @@ public class WishListService implements IWishListService {
         return new DataResult<>(wishListDtos, Result.showMessage(Result.SUCCESS, "Wish lists listed successfully"));
     }
 
+    @Cacheable(value = "wishlists", key = "#id")
     @Override
     public DataResult<WishListResponseDto> getWishListById(Long id) {
         WishList wishList = wishListRepository.findById(id)
@@ -75,5 +78,16 @@ public class WishListService implements IWishListService {
         wishListRepository.save(wishList);
         logger.info("Wish list added successfully with ID: {}", wishList.getId());
         return Result.showMessage(Result.SUCCESS, "Wish list added successfully");
+    }
+
+    @CacheEvict(value = "wishlists", key = "#id")
+    @Override
+    public Result deleteWishList(Long id) {
+        WishList wishList = wishListRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Wish list not found with ID: " + id));
+
+        wishListRepository.delete(wishList);
+        logger.info("Wish list deleted successfully with ID: {}", id);
+        return Result.showMessage(Result.SUCCESS, "Wish list deleted successfully");
     }
 }

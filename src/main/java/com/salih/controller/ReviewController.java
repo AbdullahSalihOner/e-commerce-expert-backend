@@ -56,4 +56,22 @@ public class ReviewController {
         Result result = reviewService.addReview(reviewRequestDto);
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(result);
     }
+
+    @PutMapping(ApiEndpoints.REVIEW_UPDATE)
+    public ResponseEntity<Result> updateReview(@PathVariable Long id, @RequestBody @Valid ReviewRequestDto reviewRequestDto) {
+        if (!bucket.tryConsume(1)) {
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
+        Result result = reviewService.updateReview(id, reviewRequestDto);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    @DeleteMapping(ApiEndpoints.REVIEW_DELETE)
+    public ResponseEntity<Result> deleteReview(@PathVariable Long id) {
+        if (!bucket.tryConsume(1)) {
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
+        Result result = reviewService.deleteReview(id);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
+    }
 }

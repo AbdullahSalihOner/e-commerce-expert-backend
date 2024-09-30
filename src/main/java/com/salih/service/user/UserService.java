@@ -12,6 +12,8 @@ import com.salih.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +43,7 @@ public class UserService implements IUserService {
         return new DataResult<>(userDtos, Result.showMessage(Result.SUCCESS, "Users listed successfully"));
     }
 
+    @Cacheable(value = "users", key = "#id")
     @Override
     public DataResult<UserResponseDto> getUserById(Long id) {
         User user = userRepository.findById(id)
@@ -89,6 +92,7 @@ public class UserService implements IUserService {
         return Result.SUCCESS;
     }
 
+    @CacheEvict(value = "users", key = "#id")
     @Override
     public Result deleteUser(Long id) {
         User user = userRepository.findById(id)

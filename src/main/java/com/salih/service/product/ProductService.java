@@ -15,6 +15,8 @@ import com.salih.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +48,7 @@ public class ProductService implements IProductService {
         return new DataResult<>(productDtos, Result.showMessage(Result.SUCCESS, "Products listed successfully"));
     }
 
+    @Cacheable(value = "products", key = "#id")  // Ürün Redis cache'den alınır
     @Override
     public DataResult<ProductResponseDto> getProductById(Long id) {
         Product product = productRepository.findById(id)
@@ -116,6 +119,7 @@ public class ProductService implements IProductService {
         return Result.showMessage(Result.SUCCESS, "Product updated successfully");
     }
 
+    @CacheEvict(value = "products", key = "#id") // Ürün silindiğinde cache temizlenir
     @Override
     public Result deleteProduct(Long id) {
         Product product = productRepository.findById(id)

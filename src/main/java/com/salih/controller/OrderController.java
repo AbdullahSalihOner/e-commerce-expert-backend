@@ -56,4 +56,13 @@ public class OrderController {
         Result result = orderService.placeOrder(orderRequestDto);
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(result);
     }
+
+    @DeleteMapping(ApiEndpoints.ORDER_CANCEL)
+    public ResponseEntity<Result> cancelOrder(@PathVariable Long id) {
+        if (!bucket.tryConsume(1)) {
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
+        Result result = orderService.cancelOrder(id);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
+    }
 }

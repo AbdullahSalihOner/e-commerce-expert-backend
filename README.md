@@ -509,3 +509,68 @@ In this step, we added mechanisms to ensure that:
     - POST `/api/orders/place`: Places an order, checks product stock before processing the order.
 
 
+
+# E-commerce Expert Backend
+
+## Step 15: Redis Caching Integration with Docker
+
+In this step, Redis caching has been integrated into the project using a standalone Redis instance running on Docker. This improves the performance of the application by reducing database calls and speeding up data access through caching.
+
+### Technologies Used:
+- **Spring Boot**: Backend framework used for building the REST API.
+- **Redis**: In-memory data structure store, used for caching.
+- **Docker**: Platform to run Redis as a container, enabling isolation and ease of setup.
+- **JPA (Java Persistence API)**: Used for database interaction.
+- **Lombok**: Simplifies Java class implementation by generating getters, setters, and constructors.
+- **MapStruct**: For object mapping between DTOs and entities.
+
+### Annotations Used:
+- `@EnableCaching`: Enables Spring Boot's caching mechanism across the application.
+- `@Cacheable`: Used on methods whose results should be stored in the cache. If the method is called again with the same parameters, the cached result is returned instead of executing the method again.
+- `@CacheEvict`: Used to clear or invalidate cache entries when the associated data changes, ensuring stale data is not served.
+- `@Service`: Declares a class as a Spring service.
+- `@Configuration`: Declares a class as a source of bean definitions for the Spring IoC container.
+
+### Steps Taken:
+1. **Docker Setup**:
+    - Redis is pulled from Docker Hub and run as a standalone container using the following commands:
+
+      ```bash
+      docker pull redis
+      docker run -d --name redis-container -p 6379:6379 redis
+      ```
+
+2. **Redis Configuration**:
+    - Added Redis configurations in `application.properties` to connect to the Dockerized Redis container:
+
+      ```properties
+      spring.redis.host=localhost
+      spring.redis.port=6379
+      spring.cache.type=redis
+      ```
+
+3. **Cache Configuration in Spring Boot**:
+    - A `RedisConfig` class was added to configure the cache manager and define how the data is serialized and stored in Redis. Cache entries are configured to expire after 60 minutes.
+
+4. **Service Layer Caching**:
+    - Added caching to `OrderService` and `ProductService` using `@Cacheable` to cache method results and `@CacheEvict` to clear cache when relevant data is updated or deleted.
+
+### Benefits:
+- **Improved Performance**: Redis caching reduces the load on the database by storing frequently accessed data in memory.
+- **Easy Management with Docker**: Redis is running as a Docker container, making it simple to start, stop, and manage in isolated environments.
+
+### Example API Endpoints:
+1. **OrderController**:
+    - GET `/api/orders/{id}`: Fetches order details and caches the result for subsequent requests.
+    - DELETE `/api/orders/{id}`: Deletes an order and clears the related cache entry.
+
+2. **ProductController**:
+    - GET `/api/products/{id}`: Fetches product details and caches the result.
+    - DELETE `/api/products/{id}`: Deletes a product and clears the cache.
+
+### Running the Redis container:
+To run Redis on Docker, use the following commands:
+
+```bash
+docker pull redis
+docker run -d --name redis-container -p 6379:6379 redis

@@ -11,4 +11,6 @@ public interface IReviewService {
     DataResult<List<ReviewResponseDto>> getAllReviews();
     DataResult<ReviewResponseDto> getReviewById(Long id);
     Result addReview(ReviewRequestDto reviewRequestDto);
+    Result updateReview(Long id, ReviewRequestDto reviewRequestDto);
+    Result deleteReview(Long id);
 }

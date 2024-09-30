@@ -56,4 +56,13 @@ public class WishListController {
         Result result = wishListService.addWishList(wishListRequestDto);
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(result);
     }
+
+    @DeleteMapping(ApiEndpoints.WISHLIST_DELETE)
+    public ResponseEntity<Result> deleteWishList(@PathVariable Long id) {
+        if (!bucket.tryConsume(1)) {
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
+        Result result = wishListService.deleteWishList(id);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
+    }
 }
