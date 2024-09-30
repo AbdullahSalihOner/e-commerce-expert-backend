@@ -63,17 +63,16 @@ public class UserService implements IUserService {
 
     @Override
     public Result updateUser(Long id, UserRequestDto userRequestDto) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        user.setName(userRequestDto.getName());
-        user.setEmail(userRequestDto.getEmail());
-        user.setPassword(userRequestDto.getPassword());
-        user.setRole(userRequestDto.getRole());
+        existingUser.setName(userRequestDto.getName());
+        existingUser.setEmail(userRequestDto.getEmail());
+        existingUser.setPassword(userRequestDto.getPassword());
+        existingUser.setRole(userRequestDto.getRole());  // Roller güncelleniyor
 
-        userRepository.save(user);
-        logger.info("User updated successfully with ID: {}", id);
-        return Result.showMessage(Result.SUCCESS, "User updated successfully");
+        userRepository.save(existingUser);
+        return Result.SUCCESS;
     }
 
     @Override

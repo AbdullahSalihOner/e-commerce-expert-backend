@@ -454,3 +454,26 @@ In this step, we improved the maintainability of the project by centralizing all
     - POST `/api/reviews/add`
     - GET `/api/reviews/product/{productId}`
     - DELETE `/api/reviews/delete/{id}`
+
+
+## Step 13: Updated User Model with Multiple Roles
+
+In this step, we modified the `User` model to support multiple roles by changing the `role` field from a single value to a `List<UserRole>`. This allows a user to have multiple roles such as `BUYER`, `SELLER`, `ADMIN`, etc.
+
+### Changes Made:
+- Updated the `User` model to support multiple roles (`List<UserRole>`).
+- Modified `UserRequestDto` and `UserResponseDto` to handle roles as a list.
+- Updated `UserMapper` to map lists of roles between the DTO and entity.
+- Adjusted `UserService` to handle multiple roles during user creation and updates.
+- Updated `UserController` to reflect the changes in how roles are managed.
+
+### Benefits:
+- **Flexibility**: A user can now have multiple roles, allowing the system to handle more complex use cases.
+- **Role Management**: Roles can be easily managed and updated through the API with full flexibility.
+
+### Example API Endpoints:
+1. **UserController**:
+    - GET `/api/users/{id}`: Get user by ID with roles.
+    - POST `/api/users/create`: Create a new user with one or more roles.
+    - PUT `/api/users/update/{id}`: Update user details and roles.
+    - DELETE `/api/users/delete/{id}`: Delete a user.

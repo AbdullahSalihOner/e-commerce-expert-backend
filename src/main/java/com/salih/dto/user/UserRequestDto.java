@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +26,6 @@ public class UserRequestDto {
     @NotNull
     private String password;
 
-    @NotNull
-    private User.UserRole role; // BUYER, SELLER, ADMIN, CARGO_COURIER
+
+    private List<User.UserRole> role; // BUYER, SELLER, ADMIN, CARGO_COURIER
 }

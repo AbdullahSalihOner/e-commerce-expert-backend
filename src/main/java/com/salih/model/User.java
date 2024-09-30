@@ -29,7 +29,7 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserRole role;
+    private List<UserRole> role;
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
