@@ -2,6 +2,7 @@ package com.salih.service.order;
 
 import com.salih.dto.order.OrderRequestDto;
 import com.salih.dto.order.OrderResponseDto;
+import com.salih.exception.OutOfStockException;
 import com.salih.exception.ResourceNotFoundException;
 import com.salih.mapper.OrderMapper;
 import com.salih.model.Order;
@@ -67,6 +68,14 @@ public class OrderService implements IOrderService {
         if (products.isEmpty()) {
             logger.warn("No products found for the order");
             throw new ResourceNotFoundException("No products found for the order");
+        }
+
+        // Ürün stoklarını kontrol et
+        for (Product product : products) {
+            if (product.getStockQuantity() < 1) {
+                logger.error("Product {} is out of stock", product.getName());
+                throw new OutOfStockException("Product " + product.getName() + " is out of stock");
+            }
         }
 
         Order order = orderMapper.toEntity(orderRequestDto);

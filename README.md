@@ -477,3 +477,35 @@ In this step, we modified the `User` model to support multiple roles by changing
     - POST `/api/users/create`: Create a new user with one or more roles.
     - PUT `/api/users/update/{id}`: Update user details and roles.
     - DELETE `/api/users/delete/{id}`: Delete a user.
+
+
+## Step 14: Added Validation for User Email Uniqueness and Product Stock Check
+
+In this step, we added mechanisms to ensure that:
+1. When a user tries to register or update their profile, their email must be unique. If the email is already in use by another user, the system will return an error.
+2. When placing an order, the system checks if the requested products have sufficient stock. If any of the products are out of stock, an error will be thrown and the order will not be processed.
+
+### Changes Made:
+
+#### **User Email Uniqueness Check:**
+- Updated the `UserService` to check if the email is already in use when creating or updating a user.
+- If the email is already in use, a `DuplicateResourceException` is thrown with an HTTP 409 (Conflict) status.
+- Updated the `UserRepository` to include the `existsByEmail` method for checking email existence.
+
+#### **Product Stock Check in OrderService:**
+- Added logic to the `OrderService` to verify if the requested products have sufficient stock when placing an order.
+- If any product is out of stock, an `OutOfStockException` is thrown with an HTTP 400 (Bad Request) status.
+
+### Benefits:
+- **User Management**: Ensures that no duplicate email addresses are used in the system, which enhances data integrity and user experience.
+- **Order Management**: Prevents orders from being placed if the requested products are out of stock, which improves inventory management.
+
+### Example API Endpoints:
+1. **UserController**:
+    - POST `/api/users/create`: Creates a new user, checks if the email is unique.
+    - PUT `/api/users/update/{id}`: Updates user information, checks if the email is unique.
+
+2. **OrderController**:
+    - POST `/api/orders/place`: Places an order, checks product stock before processing the order.
+
+

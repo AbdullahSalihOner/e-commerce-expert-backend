@@ -2,6 +2,7 @@ package com.salih.service.user;
 
 import com.salih.dto.user.UserRequestDto;
 import com.salih.dto.user.UserResponseDto;
+import com.salih.exception.DuplicateResourceException;
 import com.salih.exception.ResourceNotFoundException;
 import com.salih.mapper.UserMapper;
 import com.salih.model.User;
@@ -55,11 +56,24 @@ public class UserService implements IUserService {
 
     @Override
     public Result addUser(UserRequestDto userRequestDto) {
+        // Email'in önceden var olup olmadığını kontrol et
+        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
+            logger.error("Email already in use: {}", userRequestDto.getEmail());
+            throw new DuplicateResourceException("Email is already in use");
+        }
+
+        // Password'u önceden var olup olmadığını kontrol et
+        if (userRepository.existsByN(userRequestDto.getName())) {
+            logger.error("Password already in use: {}", userRequestDto.getPassword());
+            throw new DuplicateResourceException("Password is already in use");
+        }
+
         User user = userMapper.toEntity(userRequestDto);
         userRepository.save(user);
         logger.info("User added successfully with ID: {}", user.getId());
         return Result.showMessage(Result.SUCCESS, "User added successfully");
     }
+
 
     @Override
     public Result updateUser(Long id, UserRequestDto userRequestDto) {
