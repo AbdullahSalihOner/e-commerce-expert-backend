@@ -12,4 +12,5 @@ public interface IOrderService {
     DataResult<OrderResponseDto> getOrderById(Long id);
     Result placeOrder(OrderRequestDto orderRequestDto);
     Result cancelOrder(Long id);
+    Result updateOrderStatus(Long id, String status);
 }

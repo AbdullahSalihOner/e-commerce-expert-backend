@@ -83,4 +83,15 @@ public class OrderController {
         Result result = orderService.cancelOrder(id);
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
     }
+
+    @Operation(summary = "Update order status", description = "Updates the status of an order.")
+    @PutMapping(ApiEndpoints.ORDER_UPDATE_STATUS)
+    public ResponseEntity<Result> updateOrderStatus(@PathVariable Long id, @RequestParam String status) {
+        if (!bucket.tryConsume(1)) {
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
+        Result result = orderService.updateOrderStatus(id, status);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
+    }
+
 }

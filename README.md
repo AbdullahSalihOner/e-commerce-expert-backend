@@ -770,3 +770,68 @@ In this step, we added full support for the `Category` entity, including:
 - **Bucket4j**: For rate limiting the API requests.
 - **BreadcrumbService**: To track and store the user's navigation path.
 - **Swagger/OpenAPI**: For auto-generating API documentation.
+
+
+## Step 19: Shipment Management and Order Status Update
+
+### What We Did:
+In this step, we added support for managing shipments (shipping details) and extended the order functionality by allowing order status updates.
+
+### Changes Made:
+
+1. **Shipment DTOs**:
+    - **ShipmentRequestDto**: Contains the necessary fields to create and update shipment information (e.g., order ID, courier, tracking number, estimated delivery date).
+    - **ShipmentResponseDto**: DTO used for returning shipment data (ID, status, tracking info).
+
+2. **Shipment Service Layer**:
+    - Created `IShipmentService` interface to define shipment operations such as adding, updating, and deleting shipments.
+    - Implemented `ShipmentService` to manage CRUD operations and status updates for shipments.
+    - Added logging to provide better visibility into shipment management operations.
+
+3. **Shipment Mapper**:
+    - Used **MapStruct** to map between `Shipment` entity and DTOs.
+    - `ShipmentMapper` handles the transformation between DTOs and the shipment entity to simplify controller and service logic.
+
+4. **Shipment Controller**:
+    - **ShipmentController** provides RESTful endpoints for managing shipments:
+        - Get all shipments.
+        - Get a shipment by ID.
+        - Create, update, and delete a shipment.
+        - Update the status of a shipment (e.g., Pending, Shipped, Delivered).
+    - Integrated **BreadcrumbService** into each method to generate breadcrumb navigation paths based on user actions.
+    - Each API method is protected with **Rate Limiting** (100 requests per minute) to prevent abuse.
+
+5. **Order Status Update**:
+    - Added an endpoint to update the status of an order in `OrderController`.
+    - **OrderService** now has a method for changing the status of an order (e.g., from Pending to Delivered).
+
+6. **Breadcrumb Integration**:
+    - **BreadcrumbService** was integrated into `ShipmentController`, allowing dynamic breadcrumb generation based on the user's navigation path.
+    - Breadcrumbs are added to the HTTP response header to assist in frontend breadcrumb displays.
+
+7. **Rate Limiting**:
+    - Implemented rate limiting in `ShipmentController` to limit API calls to 100 requests per minute using **Bucket4j**.
+
+### API Endpoints for Shipments:
+
+| HTTP Method | Endpoint                                    | Description                           |
+|-------------|---------------------------------------------|---------------------------------------|
+| GET         | `/api/shipments/all`                        | Get all shipments                     |
+| GET         | `/api/shipments/{id}`                       | Get a shipment by ID                  |
+| POST        | `/api/shipments/create`                     | Create a new shipment                 |
+| PUT         | `/api/shipments/update/{id}`                | Update an existing shipment by ID     |
+| PUT         | `/api/shipments/update-status/{id}`         | Update the status of a shipment       |
+| DELETE      | `/api/shipments/delete/{id}`                | Delete a shipment by ID               |
+
+### API Endpoints for Order Status Update:
+
+| HTTP Method | Endpoint                                    | Description                           |
+|-------------|---------------------------------------------|---------------------------------------|
+| PUT         | `/api/orders/update-status/{id}`            | Update the status of an order         |
+
+### Technologies & Libraries Used:
+- **Spring Boot**: Framework for developing the API.
+- **MapStruct**: For mapping between DTOs and entities.
+- **Bucket4j**: For rate limiting the API requests.
+- **BreadcrumbService**: To track and store the user's navigation path dynamically.
+- **Swagger/OpenAPI**: For auto-generating API documentation.

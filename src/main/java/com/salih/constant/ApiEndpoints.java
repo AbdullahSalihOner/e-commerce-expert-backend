@@ -49,6 +49,16 @@ public class ApiEndpoints {
     public static final String CATEGORY_UPDATE = "/update/{id}";
     public static final String CATEGORY_DELETE = "/delete/{id}";
 
+    // Shipment Endpoints
+    public static final String SHIPMENT_BASE = "/api/shipments";
+    public static final String SHIPMENT_GET_ALL = "/all";
+    public static final String SHIPMENT_GET_BY_ID = "/{id}";
+    public static final String SHIPMENT_CREATE = "/create";
+    public static final String SHIPMENT_UPDATE = "/update/{id}";
+    public static final String SHIPMENT_UPDATE_STATUS = "/update-status/{id}";
+    public static final String SHIPMENT_DELETE = "/delete/{id}";
+    public static final String ORDER_UPDATE_STATUS = "/update-status/{id}";
+
 
     // Other Endpoints (if applicable)
     // Add more as needed...

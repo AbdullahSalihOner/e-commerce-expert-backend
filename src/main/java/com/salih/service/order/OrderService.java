@@ -102,4 +102,16 @@ public class OrderService implements IOrderService {
         logger.info("Order deleted successfully with ID: {}", id);
         return Result.showMessage(Result.SUCCESS, "Order deleted successfully");
     }
+
+    @Override
+    public Result updateOrderStatus(Long id, String status) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        order.setStatus(Order.OrderStatus.valueOf(status.toUpperCase()));
+
+        orderRepository.save(order);
+        logger.info("Order status updated successfully with ID: {}", id);
+        return Result.SUCCESS;
+    }
 }
