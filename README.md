@@ -900,3 +900,23 @@ In this step, we added support for handling product images as a list of URLs (`L
   ]
 }
 ```
+
+## Step 21: Bug Fix - `content` Field and `JSON` Storage Handling
+
+### Changes:
+1. **ProductService Update**:
+    - Added null checks for product listing, fetching by ID, and category-based searches.
+    - When products are null or empty, a `404 Not Found` error is returned.
+
+2. **ProductController Update**:
+    - Enhanced breadcrumb generation. If breadcrumbs or product lists are null, an empty list is returned instead.
+    - All results are checked, and correct HTTP responses are ensured using `ResponseEntity`.
+
+3. **ProductMapper Update**:
+    - Added error handling for converting the `images` field into JSON format.
+    - A `RuntimeException` is thrown if there are errors in JSON string conversion.
+
+### API Endpoints with Improved Error Handling:
+- **Get All Products**: `/api/products/all`
+- **Get Product by ID**: `/api/products/{id}`
+- **Get Products by Category**: `/api/products/category/{categoryId}`

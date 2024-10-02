@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -46,9 +47,20 @@ public class ProductController {
         List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/products");
 
         DataResult<List<ProductResponseDto>> result = productService.getAllProducts();
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
-                .body(new ProductResponseWithBreadcrumbDto(result.getData(), breadcrumbs));
+
+        // Eğer result veya verileri boşsa NOT_FOUND döndürelim
+        if (result == null || result.getData() == null || result.getData().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        if (breadcrumbs == null || breadcrumbs.isEmpty()) {
+            breadcrumbs = new ArrayList<>();  // Eğer breadcrumbs boşsa boş bir liste döndürelim
+        }
+
+        ProductResponseWithBreadcrumbDto response = new ProductResponseWithBreadcrumbDto(result.getData(), breadcrumbs);
+        return ResponseEntity.ok(response);
     }
+
 
     @Operation(summary = "Get product by ID", description = "Returns a single product based on the provided ID.")
     @GetMapping(ApiEndpoints.PRODUCT_GET_BY_ID)
@@ -60,9 +72,20 @@ public class ProductController {
         List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/products/" + id);
 
         DataResult<ProductResponseDto> result = productService.getProductById(id);
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
-                .body(new ProductResponseWithBreadcrumbDto(List.of(result.getData()), breadcrumbs));
+
+        // Eğer result veya verileri boşsa NOT_FOUND döndürelim
+        if (result == null || result.getData() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        if (breadcrumbs == null || breadcrumbs.isEmpty()) {
+            breadcrumbs = new ArrayList<>();  // Eğer breadcrumbs boşsa boş bir liste döndürelim
+        }
+
+        ProductResponseWithBreadcrumbDto response = new ProductResponseWithBreadcrumbDto(List.of(result.getData()), breadcrumbs);
+        return ResponseEntity.ok(response);
     }
+
 
     @Operation(summary = "Get products by category", description = "Returns a list of products in the provided category.")
     @GetMapping(ApiEndpoints.PRODUCT_GET_BY_CATEGORY)
@@ -74,9 +97,20 @@ public class ProductController {
         List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/products/category/" + categoryId);
 
         DataResult<List<ProductResponseDto>> result = productService.getProductsByCategory(categoryId);
-        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND)
-                .body(new ProductResponseWithBreadcrumbDto(result.getData(), breadcrumbs));
+
+        // Eğer result veya verileri boşsa NOT_FOUND döndürelim
+        if (result == null || result.getData() == null || result.getData().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        if (breadcrumbs == null || breadcrumbs.isEmpty()) {
+            breadcrumbs = new ArrayList<>();  // Eğer breadcrumbs boşsa boş bir liste döndürelim
+        }
+
+        ProductResponseWithBreadcrumbDto response = new ProductResponseWithBreadcrumbDto(result.getData(), breadcrumbs);
+        return ResponseEntity.ok(response);
     }
+
 
     @Operation(summary = "Add new product", description = "Creates a new product with the provided data.")
     @PostMapping(ApiEndpoints.PRODUCT_ADD)

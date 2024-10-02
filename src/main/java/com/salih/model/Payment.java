@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
+
 @SuperBuilder
 @Data
 @NoArgsConstructor
@@ -14,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "payments")
-public class Payment extends BaseEntity {
+public class Payment extends BaseEntity implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false)

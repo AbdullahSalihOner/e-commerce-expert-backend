@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -37,6 +38,9 @@ public interface ProductMapper {
 
     @Named("mapImagesToDto")
     default List<String> mapImagesToDto(String images) {
+        if (images == null || images.isEmpty()) {
+            return new ArrayList<>();  // Boş bir liste döndürün
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(images, List.class);  // JSON'dan listeye dönüştürüyoruz
@@ -44,5 +48,6 @@ public interface ProductMapper {
             throw new RuntimeException("Error converting JSON string to images list", e);
         }
     }
+
 
 }

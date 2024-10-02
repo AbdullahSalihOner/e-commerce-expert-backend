@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 @SuperBuilder
 @Data
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "products")
-public class Product extends BaseEntity {
+public class Product extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
     private String name;

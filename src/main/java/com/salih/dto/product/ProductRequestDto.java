@@ -3,13 +3,14 @@ package com.salih.dto.product;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductRequestDto {
+public class ProductRequestDto implements Serializable {
     private String name;
     private String description;
     private Double price;

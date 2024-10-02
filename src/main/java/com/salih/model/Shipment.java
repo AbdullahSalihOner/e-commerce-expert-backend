@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @SuperBuilder
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "shipments")
-public class Shipment extends BaseEntity {
+public class Shipment extends BaseEntity implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false)

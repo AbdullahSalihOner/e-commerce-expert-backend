@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "about")
-public class About extends BaseEntity {
+public class About extends BaseEntity implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)  // Satıcı User

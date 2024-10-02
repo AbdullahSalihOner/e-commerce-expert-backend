@@ -2,13 +2,14 @@ package com.salih.dto.product;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductResponseDto  {
+public class ProductResponseDto implements Serializable {
     private Long id;
     private String name;
     private String description;

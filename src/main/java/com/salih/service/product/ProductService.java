@@ -36,7 +36,9 @@ public class ProductService implements IProductService {
     @Override
     public DataResult<List<ProductResponseDto>> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        if (products.isEmpty()) {
+
+        // Ürünlerin null olup olmadığını kontrol edelim
+        if (products == null || products.isEmpty()) {
             logger.warn("No products found");
             throw new ResourceNotFoundException("No products found");
         }
@@ -49,7 +51,8 @@ public class ProductService implements IProductService {
         return new DataResult<>(productDtos, Result.showMessage(Result.SUCCESS, "Products listed successfully"));
     }
 
-    @Cacheable(value = "products", key = "#id")  // Ürün Redis cache'den alınır
+
+    //@Cacheable(value = "products", key = "#id")  // Ürün Redis cache'den alınır
     @Override
     public DataResult<ProductResponseDto> getProductById(Long id) {
         Product product = productRepository.findById(id)
@@ -57,6 +60,11 @@ public class ProductService implements IProductService {
                     logger.error("Product not found with ID: {}", id);
                     return new ResourceNotFoundException("Product not found with ID: " + id);
                 });
+
+        // Product'ın null olup olmadığını kontrol edelim
+        if (product == null) {
+            throw new ResourceNotFoundException("Product not found with ID: " + id);
+        }
 
         ProductResponseDto productDto = productMapper.toDto(product);
         logger.info("Product found with ID: {}", id);
@@ -66,7 +74,9 @@ public class ProductService implements IProductService {
     @Override
     public DataResult<List<ProductResponseDto>> getProductsByCategory(Long categoryId) {
         List<Product> products = productRepository.findByCategoryId(categoryId);
-        if (products.isEmpty()) {
+
+        // Ürünlerin null veya boş olup olmadığını kontrol edelim
+        if (products == null || products.isEmpty()) {
             logger.warn("No products found for category ID: {}", categoryId);
             throw new ResourceNotFoundException("No products found for category ID: " + categoryId);
         }
@@ -78,6 +88,7 @@ public class ProductService implements IProductService {
         logger.info("Products listed successfully for category ID: {}", categoryId);
         return new DataResult<>(productDtos, Result.showMessage(Result.SUCCESS, "Products listed successfully"));
     }
+
 
     @Override
     public Result addProduct(ProductRequestDto productDto) {

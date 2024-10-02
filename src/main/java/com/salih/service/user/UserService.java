@@ -43,7 +43,7 @@ public class UserService implements IUserService {
         return new DataResult<>(userDtos, Result.showMessage(Result.SUCCESS, "Users listed successfully"));
     }
 
-    @Cacheable(value = "users", key = "#id")
+    //@Cacheable(value = "users", key = "#id")
     @Override
     public DataResult<UserResponseDto> getUserById(Long id) {
         User user = userRepository.findById(id)

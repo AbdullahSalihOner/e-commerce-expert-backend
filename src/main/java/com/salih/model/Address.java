@@ -7,13 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
+
 @SuperBuilder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "addresses")
-public class Address extends BaseEntity {
+public class Address extends BaseEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)  // Kullanıcı User

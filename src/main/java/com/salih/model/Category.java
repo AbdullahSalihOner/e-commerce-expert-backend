@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.util.List;
 
 @SuperBuilder
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "categories")
-public class Category extends BaseEntity {
+public class Category extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
     private String name;

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
+
 
 @SuperBuilder
 @Data
@@ -15,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "reviews")
-public class Review extends BaseEntity {
+public class Review extends BaseEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)

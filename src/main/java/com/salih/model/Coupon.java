@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "coupons")
-public class Coupon extends BaseEntity {
+public class Coupon extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
     private String code;
