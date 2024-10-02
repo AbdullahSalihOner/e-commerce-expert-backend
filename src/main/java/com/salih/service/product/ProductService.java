@@ -1,5 +1,6 @@
 package com.salih.service.product;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.salih.dto.product.ProductRequestDto;
 import com.salih.dto.product.ProductResponseDto;
 import com.salih.exception.ResourceNotFoundException;
@@ -90,6 +91,14 @@ public class ProductService implements IProductService {
         product.setCategory(category);
         product.setUser(seller);
 
+        // Images alanını JSON olarak ayarlıyoruz
+        try {
+            product.setImagesFromList(productDto.getImages());
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting images list to JSON", e);
+            throw new RuntimeException("Error processing images list");
+        }
+
         productRepository.save(product);
         logger.info("Product added successfully with ID: {}", product.getId());
         return Result.showMessage(Result.SUCCESS, "Product added successfully");
@@ -110,9 +119,16 @@ public class ProductService implements IProductService {
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setStockQuantity(productDto.getStockQuantity());
-        product.setImages(productDto.getImages());
         product.setCategory(category);
         product.setUser(seller);
+
+        // Images alanını JSON olarak ayarlıyoruz
+        try {
+            product.setImagesFromList(productDto.getImages());
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting images list to JSON", e);
+            throw new RuntimeException("Error processing images list");
+        }
 
         productRepository.save(product);
         logger.info("Product updated successfully with ID: {}", id);

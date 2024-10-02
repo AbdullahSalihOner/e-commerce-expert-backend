@@ -835,3 +835,68 @@ In this step, we added support for managing shipments (shipping details) and ext
 - **Bucket4j**: For rate limiting the API requests.
 - **BreadcrumbService**: To track and store the user's navigation path dynamically.
 - **Swagger/OpenAPI**: For auto-generating API documentation.
+
+
+# Step 20: JSON Serialization for Product Images
+
+## What We Did:
+In this step, we added support for handling product images as a list of URLs (`List<String>`) by storing them in the database as a JSON string. This ensures that multiple images can be associated with a product efficiently.
+
+## Changes Made:
+
+### Product Entity Update:
+- The `images` field in the `Product` entity was updated to store `List<String>` as a JSON string in the database.
+- Getter and setter methods were added to convert the `List<String>` to a JSON string when saving, and back to a list when retrieving.
+
+### ProductMapper:
+- Custom methods were added in the `ProductMapper` to handle the conversion between the `List<String>` of images and the JSON string stored in the database.
+- Used Jackson's `ObjectMapper` within the mapper to facilitate this conversion.
+
+### Product Service Layer:
+- Updated the `ProductService` to correctly map images between the `ProductRequestDto` and `Product` entity when saving and retrieving products.
+- Ensured that images are correctly processed when creating or updating a product.
+
+### Product DTOs:
+- **ProductRequestDto**: The `images` field remains as a `List<String>`, allowing for a clean API contract without exposing internal storage details.
+- **ProductResponseDto**: Returns the list of image URLs (`List<String>`) to the API consumer, keeping it consistent with the request format.
+
+### Product Controller:
+- No major changes needed in the controller, as the logic for handling the images was abstracted into the service and mapper layers.
+- The `ProductController` still provides RESTful endpoints for creating, updating, and retrieving products, with the `images` field being handled transparently.
+
+## API Endpoints for Product Images:
+| HTTP Method | Endpoint                      | Description                                             |
+|-------------|-------------------------------|---------------------------------------------------------|
+| POST        | `/api/products/add`            | Add a new product with images (as `List<String>`)        |
+| PUT         | `/api/products/update/{id}`    | Update an existing product with new images               |
+| GET         | `/api/products/{id}`           | Retrieve product details including image URLs            |
+
+## Technologies & Libraries Used:
+- **Spring Boot**: Framework for building the API.
+- **Jackson ObjectMapper**: For converting `List<String>` to a JSON string and vice versa.
+- **MapStruct**: For mapping between DTOs and entities, with custom methods for image handling.
+- **Bucket4j**: For rate limiting the API requests.
+- **Swagger/OpenAPI**: For auto-generating API documentation.
+
+## Benefits:
+- **Efficient Storage**: By storing the image URLs as a JSON string, we reduce the complexity of managing related entities for product images.
+- **Scalable**: This approach allows for easy scalability, as the number of images per product can grow without requiring schema changes.
+- **API Simplicity**: The API remains simple and clean, allowing clients to work with a `List<String>` for images, while the storage complexity is handled in the service layer.
+
+## Example API Request for Product Creation:
+
+```json
+{
+  "name": "Sample Product",
+  "description": "This is a sample product with multiple images.",
+  "price": 150.00,
+  "stockQuantity": 30,
+  "categoryId": 1,
+  "userId": 2,
+  "images": [
+    "https://example.com/image1.jpg",
+    "https://example.com/image2.jpg",
+    "https://example.com/image3.jpg"
+  ]
+}
+```

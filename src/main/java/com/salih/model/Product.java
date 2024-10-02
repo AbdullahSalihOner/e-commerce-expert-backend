@@ -1,9 +1,12 @@
 package com.salih.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.io.IOException;
 import java.util.List;
 @SuperBuilder
 @Data
@@ -34,8 +37,7 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)  // Satıcı User
     private User user;
 
-    @ElementCollection
-    private List<String> images;
+
 
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;
@@ -45,4 +47,21 @@ public class Product extends BaseEntity {
 
     @ManyToMany(mappedBy = "products")
     private List<WishList> wishLists;
+
+
+    @Lob
+    @Column(name = "images", columnDefinition = "TEXT")
+    private String images;  // images alanını JSON string olarak saklayacağız
+
+    // JSON string olarak kaydetmek için getter ve setter
+    public List<String> getImagesAsList() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(this.images, List.class); // JSON'dan listeye dönüştürme
+    }
+
+    public void setImagesFromList(List<String> imagesList) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        this.images = objectMapper.writeValueAsString(imagesList);  // Listeyi JSON string olarak kaydetme
+    }
+
 }
