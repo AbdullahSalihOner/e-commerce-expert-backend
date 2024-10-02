@@ -41,6 +41,13 @@ public class ApiEndpoints {
     public static final String REVIEW_DELETE = "/delete/{id}";
     public static final String REVIEW_UPDATE = "/update/{id}";
 
+    // Category Endpoints
+    public static final String CATEGORY_BASE = "/api/categories";
+    public static final String CATEGORY_GET_ALL = "/all";
+    public static final String CATEGORY_GET_BY_ID = "/{id}";
+    public static final String CATEGORY_CREATE = "/create";
+    public static final String CATEGORY_UPDATE = "/update/{id}";
+    public static final String CATEGORY_DELETE = "/delete/{id}";
 
 
     // Other Endpoints (if applicable)

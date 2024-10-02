@@ -713,3 +713,60 @@ In this step, we have integrated breadcrumb functionality and rate limiting into
     }
   ]
 }
+```
+
+
+## Step 18: Category Management and Breadcrumb Integration
+
+### What We Did:
+In this step, we added full support for the `Category` entity, including:
+- **DTOs** for transferring data to and from the API.
+- **Service Layer** to manage all Category-related operations (CRUD).
+- **Controller Layer** to expose Category management endpoints.
+- **Breadcrumb Integration**: We integrated **BreadcrumbService** into each endpoint in the CategoryController to allow tracking and managing user navigation paths.
+- **Rate Limiting**: Ensured that each API endpoint has rate limiting applied using Bucket4j.
+- **Swagger Documentation**: All CategoryController methods are documented using Swagger with operation summaries.
+
+### Changes Made:
+1. **Category DTOs**:
+   - Created `CategoryRequestDto` for creating and updating category data.
+   - Created `CategoryResponseDto` for sending category information as a response.
+
+2. **Service Layer**:
+   - `ICategoryService`: Interface defining the required methods for category operations.
+   - `CategoryService`: Implementation of `ICategoryService` providing logic for category creation, update, deletion, and retrieval.
+   - Added loggers for better visibility into service operations.
+
+3. **Mapper Layer**:
+   - `CategoryMapper` was implemented using **MapStruct** to map between Category entities and DTOs seamlessly.
+
+4. **Controller Layer**:
+   - **CategoryController**: Provides RESTful endpoints for managing product categories.
+   - Each method in `CategoryController` now includes:
+     - **Rate Limiting**: Limiting requests to 100 per minute using Bucket4j.
+     - **BreadcrumbService**: Tracks the navigation path of each API call and stores it.
+     - **Swagger/OpenAPI** documentation with operation summaries for easy integration with Swagger UI.
+   
+5. **Breadcrumb Integration**:
+   - Breadcrumb information is automatically tracked and stored whenever a user interacts with Category APIs, providing a full navigation trail.
+   - This helps in tracking how users are navigating through the application.
+
+6. **Rate Limiting**:
+   - Implemented rate limiting across all endpoints in `CategoryController` to avoid overuse of resources.
+
+### API Endpoints:
+
+| HTTP Method | Endpoint                              | Description                        |
+|-------------|---------------------------------------|------------------------------------|
+| GET         | `/api/categories/all`                 | Get all categories                 |
+| GET         | `/api/categories/{id}`                | Get a category by its ID           |
+| POST        | `/api/categories/create`              | Create a new category              |
+| PUT         | `/api/categories/update/{id}`         | Update an existing category by ID  |
+| DELETE      | `/api/categories/delete/{id}`         | Delete a category by its ID        |
+
+### Technologies & Libraries Used:
+- **Spring Boot**: Framework for developing the API.
+- **MapStruct**: For mapping between DTOs and entities.
+- **Bucket4j**: For rate limiting the API requests.
+- **BreadcrumbService**: To track and store the user's navigation path.
+- **Swagger/OpenAPI**: For auto-generating API documentation.

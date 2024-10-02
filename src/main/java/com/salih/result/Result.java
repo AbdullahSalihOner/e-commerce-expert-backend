@@ -18,6 +18,7 @@ public class Result {
     public static final Result VALIDATION_ERROR = new Result(2, "VALIDATION ERROR!");
     public static final Result NOT_FOUND = new Result(3, "RESOURCE NOT FOUND!");
     public static final Result BAD_REQUEST = new Result(4, "BAD REQUEST!");
+    public static final Result FAILURE = new Result(5, "FAILURE!");
 
     // Copy constructor
     public Result(Result result) {
