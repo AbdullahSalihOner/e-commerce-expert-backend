@@ -1,6 +1,7 @@
 package com.salih.controller;
 
 import com.salih.constant.ApiEndpoints;
+import com.salih.dto.user.LoginDto;
 import com.salih.dto.user.UserRequestDto;
 import com.salih.dto.user.UserResponseDto;
 import com.salih.dto.user.UserResponseWithBreadcrumbDto;
@@ -92,5 +93,35 @@ public class UserController {
         }
         Result result = userService.deleteUser(id);
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    @Operation(summary = "Login", description = "Logs in the user with the provided email and password.")
+    @PostMapping(ApiEndpoints.USER_LOGIN)
+    public ResponseEntity<Result> login(@RequestBody @Valid LoginDto loginDto) {
+        if (!bucket.tryConsume(1)) {
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
+        Result result = userService.login(loginDto);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    @Operation(summary = "Logout", description = "Logs out the currently logged in user.")
+    @PostMapping(ApiEndpoints.USER_LOGOUT)
+    public ResponseEntity<Result> logout() {
+        if (!bucket.tryConsume(1)) {
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
+        Result result = userService.logout();
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    @Operation(summary = "Sign up", description = "Registers a new user with the provided data.")
+    @PostMapping(ApiEndpoints.USER_SIGNUP)
+    public ResponseEntity<Result> signup(@RequestBody @Valid UserRequestDto userRequestDto) {
+        if (!bucket.tryConsume(1)) {
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
+        Result result = userService.signup(userRequestDto);
+        return ResponseEntity.status(result.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(result);
     }
 }

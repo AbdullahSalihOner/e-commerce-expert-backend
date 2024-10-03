@@ -1,5 +1,6 @@
 package com.salih.service.user;
 
+import com.salih.dto.user.LoginDto;
 import com.salih.dto.user.UserRequestDto;
 import com.salih.dto.user.UserResponseDto;
 import com.salih.exception.DuplicateResourceException;
@@ -102,4 +103,44 @@ public class UserService implements IUserService {
         logger.info("User deleted successfully with ID: {}", id);
         return Result.showMessage(Result.SUCCESS, "User deleted successfully");
     }
+
+
+    @Override
+    public Result login(LoginDto loginDto){
+        User user = userRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + loginDto.getEmail()));
+
+        if (!user.getPassword().equals(loginDto.getPassword())) {
+            logger.error("Invalid password for email: {}", loginDto.getEmail());
+            throw new ResourceNotFoundException("Invalid password");
+        }
+
+        logger.info("User logged in successfully with ID: {}", user.getId());
+        return Result.showMessage(Result.SUCCESS, "User logged in successfully");
+    }
+
+    @Override
+    public Result logout() {
+        logger.info("User logged out successfully");
+        return Result.showMessage(Result.SUCCESS, "User logged out successfully");
+    }
+
+    @Override
+    public Result signup(UserRequestDto userRequestDto) {
+        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
+            logger.error("Email already in use: {}", userRequestDto.getEmail());
+            throw new DuplicateResourceException("Email is already in use");
+        }
+
+        if (userRepository.existsByPassword(userRequestDto.getPassword())) {
+            logger.error("Password already in use: {}", userRequestDto.getPassword());
+            throw new DuplicateResourceException("Password is already in use");
+        }
+
+        User user = userMapper.toEntity(userRequestDto);
+        userRepository.save(user);
+        logger.info("User signed up successfully with ID: {}", user.getId());
+        return Result.showMessage(Result.SUCCESS, "User signed up successfully");
+    }
+
 }

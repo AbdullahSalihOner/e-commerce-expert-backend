@@ -920,3 +920,31 @@ In this step, we added support for handling product images as a list of URLs (`L
 - **Get All Products**: `/api/products/all`
 - **Get Product by ID**: `/api/products/{id}`
 - **Get Products by Category**: `/api/products/category/{categoryId}`
+
+
+## Step 22: CORS, RestTemplate Configuration, User Authentication and Signup
+
+### 1. CORS (Cross-Origin Resource Sharing) Configuration
+
+In this step, a `WebConfig` class was added to the project to allow cross-origin requests from any origin. This is essential when building APIs that need to be accessible by clients hosted on different domains.
+
+**Used Annotation:**
+- `@Configuration`: Indicates that the class can be used by the Spring IoC container as a source of bean definitions.
+- `WebMvcConfigurer`: Allows customizing Spring MVC's default configurations.
+
+**Benefits:**
+- Allows controlled access from external domains or APIs.
+- Necessary for frontend and mobile clients to interact with the backend.
+
+```java
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET", "POST", "PATCH", "DELETE")
+                .allowedHeaders("*");
+    }
+}
+```
