@@ -157,4 +157,22 @@ public class ProductService implements IProductService {
         logger.info("Product deleted successfully with ID: {}", id);
         return Result.showMessage(Result.SUCCESS, "Product deleted successfully");
     }
+
+    @Override
+    public DataResult<List<ProductResponseDto>> getProductsByUserId(Long userId) {
+        List<Product> products = productRepository.findByUserId(userId);
+
+        // Ürünlerin null veya boş olup olmadığını kontrol edelim
+        if (products == null || products.isEmpty()) {
+            logger.warn("No products found for user ID: {}", userId);
+            throw new ResourceNotFoundException("No products found for user ID: " + userId);
+        }
+
+        List<ProductResponseDto> productDtos = products.stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
+
+        logger.info("Products listed successfully for user ID: {}", userId);
+        return new DataResult<>(productDtos, Result.showMessage(Result.SUCCESS, "Products listed successfully"));
+    }
 }

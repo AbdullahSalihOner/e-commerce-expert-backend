@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface IProductService {
     DataResult<List<ProductResponseDto>> getAllProducts();
+    DataResult<List<ProductResponseDto>> getProductsByUserId(Long userId);
     DataResult<ProductResponseDto> getProductById(Long id);
     DataResult<List<ProductResponseDto>> getProductsByCategory(Long categoryId);
     Result addProduct(ProductRequestDto productDto);

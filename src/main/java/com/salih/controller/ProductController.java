@@ -141,4 +141,28 @@ public class ProductController {
         Result result = productService.deleteProduct(id);
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
     }
+
+    @Operation(summary = "Get products by user ID", description = "Returns a list of products added by the provided user.")
+    @GetMapping(ApiEndpoints.PRODUCT_GET_BY_USER_ID)
+    public ResponseEntity<ProductResponseWithBreadcrumbDto> getProductsByUserId(@PathVariable Long userId) {
+        if (!bucket.tryConsume(1)) {
+            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+        }
+
+        List<BreadcrumbItem> breadcrumbs = breadcrumbService.generateBreadcrumb("/products/user/" + userId);
+
+        DataResult<List<ProductResponseDto>> result = productService.getProductsByUserId(userId);
+
+        // Eğer result veya verileri boşsa NOT_FOUND döndürelim
+        if (result == null || result.getData() == null || result.getData().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        if (breadcrumbs == null || breadcrumbs.isEmpty()) {
+            breadcrumbs = new ArrayList<>();  // Eğer breadcrumbs boşsa boş bir liste döndürelim
+        }
+
+        ProductResponseWithBreadcrumbDto response = new ProductResponseWithBreadcrumbDto(result.getData(), breadcrumbs);
+        return ResponseEntity.ok(response);
+    }
 }

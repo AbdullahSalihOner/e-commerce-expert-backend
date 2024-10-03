@@ -10,6 +10,7 @@ public class ApiEndpoints {
     public static final String PRODUCT_DELETE = "/delete/{id}";
     public static final String PRODUCT_GET_ALL = "/all";
     public static final String PRODUCT_GET_BY_CATEGORY = "/category/{categoryId}";
+    public static final String PRODUCT_GET_BY_USER_ID = "/user/{userId}";
 
     // Order Endpoints
     public static final String ORDER_BASE = "/api/orders";
@@ -61,6 +62,7 @@ public class ApiEndpoints {
     public static final String ORDER_UPDATE_STATUS = "/update-status/{id}";
     public static final String USER_LOGOUT = "/logout";
     public static final String USER_SIGNUP = "/signup";
+
 
 
     // Other Endpoints (if applicable)
