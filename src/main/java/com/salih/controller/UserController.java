@@ -115,6 +115,8 @@ public class UserController {
         return ResponseEntity.status(result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(result);
     }
 
+
+    
     @Operation(summary = "Sign up", description = "Registers a new user with the provided data.")
     @PostMapping(ApiEndpoints.USER_SIGNUP)
     public ResponseEntity<Result> signup(@RequestBody @Valid UserRequestDto userRequestDto) {
