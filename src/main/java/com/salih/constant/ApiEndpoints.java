@@ -27,6 +27,9 @@ public class ApiEndpoints {
     public static final String USER_DELETE = "/delete/{id}";
     public static final String USER_GET_ALL = "/all";
     public static final String USER_LOGIN = "/login";
+    public static final String USER_LOGOUT = "/logout";
+    public static final String USER_SIGNUP = "/signup";
+
 
     // WishList Endpoints
     public static final String WISHLIST_BASE = "/api/wishlists";
@@ -60,8 +63,6 @@ public class ApiEndpoints {
     public static final String SHIPMENT_UPDATE_STATUS = "/update-status/{id}";
     public static final String SHIPMENT_DELETE = "/delete/{id}";
     public static final String ORDER_UPDATE_STATUS = "/update-status/{id}";
-    public static final String USER_LOGOUT = "/logout";
-    public static final String USER_SIGNUP = "/signup";
 
 
 

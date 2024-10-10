@@ -116,7 +116,7 @@ public class UserController {
     }
 
 
-    
+
     @Operation(summary = "Sign up", description = "Registers a new user with the provided data.")
     @PostMapping(ApiEndpoints.USER_SIGNUP)
     public ResponseEntity<Result> signup(@RequestBody @Valid UserRequestDto userRequestDto) {
